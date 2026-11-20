@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useGame } from '../game/state/GameStateContext';
 import { InspectableObject, LocationScene, EvidenceItem } from '../game/state/types';
+import { SceneIllustration } from './graphics/SceneIllustrations';
+import { EvidenceGraphic } from './graphics/EvidenceIllustrations';
 import {
   MapPin,
   Search,
@@ -120,81 +122,49 @@ export const LocationViewer: React.FC = () => {
         </div>
       </div>
 
-      {/* Interactive 2D Crime Scene Canvas */}
+      {/* Interactive 2D Crime Scene Graphic Canvas */}
       <div style={{
         position: 'relative',
         width: '100%',
-        height: '420px',
-        background: 'radial-gradient(ellipse at center, #1b2333 0%, #0c0f17 100%)',
+        minHeight: '440px',
+        background: '#090d16',
         border: '2px solid var(--border-subtle)',
         borderRadius: '10px',
-        boxShadow: 'inset 0 0 40px rgba(0, 0, 0, 0.8)',
+        boxShadow: '0 12px 30px rgba(0, 0, 0, 0.8)',
         marginBottom: '24px',
         overflow: 'hidden'
       }}>
-        {/* Subtle architectural schematic grid lines */}
-        <div style={{
-          position: 'absolute',
-          top: 0, left: 0, right: 0, bottom: 0,
-          backgroundImage: 'linear-gradient(rgba(56, 189, 248, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(56, 189, 248, 0.05) 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
-          pointerEvents: 'none'
-        }} />
+        {/* Render Vector Graphic Illustration of the Crime Scene */}
+        <SceneIllustration
+          locationId={currentLocation.id}
+          inspectables={currentLocation.inspectables}
+          inspectedIds={gameState.inspectedObjectIds}
+          onInspect={handleInspect}
+        />
 
         {/* Scene HUD watermark */}
         <div style={{
           position: 'absolute',
-          top: 16,
-          left: 20,
+          top: 14,
+          left: 18,
           fontFamily: 'var(--font-mono)',
           fontSize: '0.75rem',
-          color: 'var(--text-faint)',
-          letterSpacing: '0.1em'
+          color: 'var(--accent-amber)',
+          letterSpacing: '0.1em',
+          background: 'rgba(10, 12, 16, 0.85)',
+          padding: '4px 10px',
+          borderRadius: '4px',
+          border: '1px solid var(--border-subtle)',
+          pointerEvents: 'none'
         }}>
-          SCENE ID: {currentLocation.id.toUpperCase()} // FORENSIC SECTOR ACTIVE
+          CRIME SCENE: {currentLocation.name.toUpperCase()} // CLICK OBJECTS TO EXAMINE FORENSICS
         </div>
-
-        {/* Interactive Hotspot Pins */}
-        {currentLocation.inspectables.map(obj => {
-          const isInspected = gameState.inspectedObjectIds.includes(obj.id);
-          const hasClue = !!obj.revealedEvidenceId;
-
-          return (
-            <div
-              key={obj.id}
-              className="scene-hotspot-pin"
-              style={{ left: `${obj.x}%`, top: `${obj.y}%` }}
-              onClick={() => handleInspect(obj)}
-              title={`Inspect: ${obj.name}`}
-            >
-              <div className={`pin-bubble ${isInspected ? 'inspected' : ''}`}>
-                {isInspected ? <CheckCircle size={18} /> : <Search size={18} />}
-              </div>
-              <div style={{
-                position: 'absolute',
-                top: '42px',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                background: 'rgba(10, 12, 16, 0.9)',
-                border: '1px solid var(--border-subtle)',
-                color: '#fff',
-                fontSize: '0.75rem',
-                padding: '2px 8px',
-                borderRadius: '4px',
-                whiteSpace: 'nowrap',
-                pointerEvents: 'none'
-              }}>
-                {obj.name}
-              </div>
-            </div>
-          );
-        })}
       </div>
 
       {/* Accessible Inspectables Grid List */}
       <div>
         <h3 style={{ fontSize: '1rem', color: 'var(--text-muted)', marginBottom: '12px' }}>
-          Inspectable Evidence & Focal Points in this Scene
+          Inspectable Evidence & Forensic Focal Points in this Scene
         </h3>
         <div className="grid-3">
           {currentLocation.inspectables.map(obj => {
@@ -236,13 +206,16 @@ export const LocationViewer: React.FC = () => {
         <div className="modal-overlay" onClick={handleCloseModal}>
           <div className="modal-content" onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
-              <div>
-                <span className="stamp stamp-cyan" style={{ fontSize: '0.7rem', marginBottom: '8px' }}>
-                  {selectedInspectable.category}
-                </span>
-                <h2 style={{ fontSize: '1.4rem', color: '#fff', fontWeight: '700' }}>
-                  {selectedInspectable.name}
-                </h2>
+              <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+                <EvidenceGraphic id={selectedInspectable.revealedEvidenceId || ''} size={90} />
+                <div>
+                  <span className="stamp stamp-cyan" style={{ fontSize: '0.7rem', marginBottom: '6px' }}>
+                    {selectedInspectable.category}
+                  </span>
+                  <h2 style={{ fontSize: '1.4rem', color: '#fff', fontWeight: '700', marginTop: '2px' }}>
+                    {selectedInspectable.name}
+                  </h2>
+                </div>
               </div>
               <button className="icon-btn" onClick={handleCloseModal}>
                 <X size={20} />

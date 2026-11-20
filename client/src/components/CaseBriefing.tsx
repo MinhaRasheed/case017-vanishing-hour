@@ -1,5 +1,6 @@
 import React from 'react';
 import { useGame } from '../game/state/GameStateContext';
+import { CharacterPortrait } from './graphics/CharacterPortraits';
 import {
   FileText,
   User,
@@ -56,22 +57,16 @@ export const CaseBriefing: React.FC = () => {
             </span>
             <span className="stamp stamp-amber">{c.victim.status}</span>
           </div>
-          <div style={{ display: 'flex', gap: '16px', alignItems: 'center', marginBottom: '16px' }}>
-            <div style={{
-              width: '64px',
-              height: '64px',
-              borderRadius: '8px',
-              background: '#0f172a',
-              border: '1px solid #334155',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              <User size={36} color="var(--text-muted)" />
-            </div>
+          <div style={{ display: 'flex', gap: '20px', alignItems: 'center', marginBottom: '16px' }}>
+            <CharacterPortrait id="timothy_vance" size={110} statusBadge="MISSING" />
             <div>
-              <h2 style={{ fontSize: '1.3rem', color: '#f8fafc' }}>{c.victim.name}</h2>
-              <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Age {c.victim.age} • {c.victim.occupation}</div>
+              <h2 style={{ fontSize: '1.4rem', color: '#f8fafc', fontWeight: '800' }}>{c.victim.name}</h2>
+              <div style={{ fontSize: '0.85rem', color: 'var(--accent-amber)', marginTop: '2px' }}>
+                Age {c.victim.age} • {c.victim.occupation}
+              </div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+                Oberlin-Vane Trust • Forensic Auditing Division
+              </div>
             </div>
           </div>
           <p style={{ fontSize: '0.95rem', lineHeight: 1.6, color: '#cbd5e1', marginBottom: '14px' }}>

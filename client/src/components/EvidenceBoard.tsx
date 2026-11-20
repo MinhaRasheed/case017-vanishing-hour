@@ -1,6 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { useGame } from '../game/state/GameStateContext';
 import { BoardConnection } from '../game/state/types';
+import { CharacterPortrait } from './graphics/CharacterPortraits';
+import { EvidenceGraphic } from './graphics/EvidenceIllustrations';
 import {
   Share2,
   Plus,
@@ -326,26 +328,34 @@ export const EvidenceBoard: React.FC = () => {
                 {node.type}
               </div>
 
-              <div style={{
-                fontSize: '0.9rem',
-                fontWeight: '700',
-                color: '#fff',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis'
-              }}>
-                {node.title}
-              </div>
-
-              <div style={{
-                fontSize: '0.75rem',
-                color: 'var(--text-muted)',
-                marginTop: '2px',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis'
-              }}>
-                {node.subtitle}
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginTop: '6px' }}>
+                {isSuspect ? (
+                  <CharacterPortrait id={node.id} size={42} showBadge={false} />
+                ) : (
+                  <EvidenceGraphic id={node.id} size={42} />
+                )}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{
+                    fontSize: '0.85rem',
+                    fontWeight: '700',
+                    color: '#fff',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis'
+                  }}>
+                    {node.title}
+                  </div>
+                  <div style={{
+                    fontSize: '0.7rem',
+                    color: 'var(--text-muted)',
+                    marginTop: '2px',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis'
+                  }}>
+                    {node.subtitle}
+                  </div>
+                </div>
               </div>
             </div>
           );

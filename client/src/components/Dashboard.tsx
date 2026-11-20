@@ -1,5 +1,6 @@
 import React from 'react';
 import { useGame } from '../game/state/GameStateContext';
+import { CharacterPortrait } from './graphics/CharacterPortraits';
 import {
   MapPin,
   Users,
@@ -149,30 +150,34 @@ export const Dashboard: React.FC = () => {
                   key={suspect.id}
                   className="detective-card"
                   style={{
-                    padding: '14px 18px',
+                    padding: '12px 16px',
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    gap: '14px'
                   }}
                   onClick={() => handleGoToSuspect(suspect.id)}
                 >
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <span style={{ fontWeight: '700', color: '#fff', fontSize: '1rem' }}>{suspect.name}</span>
-                      {hasBrokenAlibi ? (
-                        <span className="stamp stamp-red" style={{ fontSize: '0.65rem' }}>ALIBI SHATTERED</span>
-                      ) : (
-                        <span className="stamp stamp-amber" style={{ fontSize: '0.65rem' }}>STATEMENT UNVERIFIED</span>
-                      )}
-                    </div>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-                      {suspect.occupation} • {suspect.relation}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                    <CharacterPortrait id={suspect.id} size={50} showBadge={false} />
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ fontWeight: '700', color: '#fff', fontSize: '0.95rem' }}>{suspect.name}</span>
+                        {hasBrokenAlibi ? (
+                          <span className="stamp stamp-red" style={{ fontSize: '0.6rem', padding: '1px 5px' }}>LIES EXPOSED</span>
+                        ) : (
+                          <span className="stamp stamp-amber" style={{ fontSize: '0.6rem', padding: '1px 5px' }}>ALIBI PENDING</span>
+                        )}
+                      </div>
+                      <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '2px' }}>
+                        {suspect.occupation}
+                      </div>
                     </div>
                   </div>
 
                   <button className="btn-secondary" style={{ padding: '6px 12px', fontSize: '0.8rem' }}>
-                    Interrogate
+                    Interrogate →
                   </button>
                 </div>
               );

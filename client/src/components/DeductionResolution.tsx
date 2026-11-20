@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useGame } from '../game/state/GameStateContext';
 import { DeductionSubmission } from '../game/state/types';
+import { CharacterPortrait } from './graphics/CharacterPortraits';
 import {
   CheckCircle,
   AlertTriangle,
@@ -104,22 +105,28 @@ export const DeductionResolution: React.FC = () => {
                   key={suspect.id}
                   onClick={() => setSuspectId(suspect.id)}
                   style={{
-                    background: isSelected ? 'rgba(230, 57, 70, 0.2)' : '#0d111a',
+                    background: isSelected ? 'rgba(230, 57, 70, 0.25)' : '#0d111a',
                     border: isSelected ? '2px solid var(--accent-red)' : '1px solid var(--border-subtle)',
                     borderRadius: '8px',
-                    padding: '14px',
+                    padding: '12px',
                     cursor: 'pointer',
-                    transition: 'all 0.15s'
+                    transition: 'all 0.15s',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px'
                   }}
                 >
-                  <div style={{ fontWeight: '700', color: '#fff', fontSize: '1rem', marginBottom: '2px' }}>
-                    {suspect.name}
-                  </div>
-                  <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                    {suspect.occupation}
-                  </div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--accent-amber)', marginTop: '6px' }}>
-                    {suspect.relation}
+                  <CharacterPortrait id={suspect.id} size={55} showBadge={false} />
+                  <div>
+                    <div style={{ fontWeight: '700', color: '#fff', fontSize: '0.95rem' }}>
+                      {suspect.name}
+                    </div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '2px' }}>
+                      {suspect.occupation}
+                    </div>
+                    <div style={{ fontSize: '0.7rem', color: 'var(--accent-amber)', marginTop: '4px' }}>
+                      {suspect.relation}
+                    </div>
                   </div>
                 </div>
               );

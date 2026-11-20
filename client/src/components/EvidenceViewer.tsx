@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useGame } from '../game/state/GameStateContext';
 import { EvidenceItem, EvidenceCategory } from '../game/state/types';
+import { EvidenceGraphic } from './graphics/EvidenceIllustrations';
 import {
   Search,
   Filter,
@@ -174,13 +175,17 @@ export const EvidenceViewer: React.FC = () => {
                   {getImportanceStamp(item.importance)}
                 </div>
 
-                <h3 style={{ fontSize: '1.1rem', color: '#fff', fontWeight: '700', marginBottom: '8px' }}>
-                  {item.name}
-                </h3>
-
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: '14px' }}>
-                  {item.description}
-                </p>
+                <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start', marginBottom: '10px' }}>
+                  <EvidenceGraphic id={item.id} size={70} />
+                  <div>
+                    <h3 style={{ fontSize: '1.05rem', color: '#fff', fontWeight: '700', marginBottom: '4px' }}>
+                      {item.name}
+                    </h3>
+                    <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: 1.4 }}>
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
               </div>
 
               <div>
@@ -221,14 +226,17 @@ export const EvidenceViewer: React.FC = () => {
         <div className="modal-overlay" onClick={() => setSelectedEvidence(null)}>
           <div className="modal-content" onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
-              <div>
-                <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '6px' }}>
-                  <span className="stamp stamp-cyan" style={{ fontSize: '0.7rem' }}>{selectedEvidence.category}</span>
-                  {getImportanceStamp(selectedEvidence.importance)}
+              <div style={{ display: 'flex', gap: '18px', alignItems: 'center' }}>
+                <EvidenceGraphic id={selectedEvidence.id} size={110} />
+                <div>
+                  <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '6px' }}>
+                    <span className="stamp stamp-cyan" style={{ fontSize: '0.7rem' }}>{selectedEvidence.category}</span>
+                    {getImportanceStamp(selectedEvidence.importance)}
+                  </div>
+                  <h2 style={{ fontSize: '1.4rem', color: '#fff', fontWeight: '700' }}>
+                    {selectedEvidence.name}
+                  </h2>
                 </div>
-                <h2 style={{ fontSize: '1.4rem', color: '#fff', fontWeight: '700' }}>
-                  {selectedEvidence.name}
-                </h2>
               </div>
               <button className="icon-btn" onClick={() => setSelectedEvidence(null)}>
                 <X size={20} />

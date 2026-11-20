@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useGame } from '../game/state/GameStateContext';
 import { SuspectProfile, DialogueTopic } from '../game/state/types';
 import { ContradictionModal } from './ContradictionModal';
+import { CharacterPortrait } from './graphics/CharacterPortraits';
 import {
   Users,
   MessageSquare,
@@ -102,23 +103,19 @@ export const SuspectInterrogation: React.FC = () => {
               <span className="stamp stamp-amber">Age {currentSuspect.age}</span>
             </div>
 
-            <div style={{ display: 'flex', gap: '16px', alignItems: 'center', marginBottom: '16px' }}>
-              <div style={{
-                width: '64px',
-                height: '64px',
-                borderRadius: '8px',
-                background: '#0f172a',
-                border: '1px solid #334155',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                <User size={36} color="var(--accent-amber)" />
-              </div>
+            <div style={{ display: 'flex', gap: '20px', alignItems: 'center', marginBottom: '16px' }}>
+              <CharacterPortrait
+                id={currentSuspect.id}
+                size={120}
+                statusBadge={solvedContradictions.length > 0 ? 'ALIBI SHATTERED' : 'UNDER INQUIRY'}
+              />
               <div>
-                <h2 style={{ fontSize: '1.4rem', color: '#fff' }}>{currentSuspect.name}</h2>
-                <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-                  {currentSuspect.occupation} • {currentSuspect.relation}
+                <h2 style={{ fontSize: '1.5rem', color: '#fff', fontWeight: '800' }}>{currentSuspect.name}</h2>
+                <div style={{ color: 'var(--accent-amber)', fontSize: '0.85rem', fontWeight: '600', marginTop: '2px' }}>
+                  {currentSuspect.occupation}
+                </div>
+                <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginTop: '4px' }}>
+                  Relation: {currentSuspect.relation}
                 </div>
               </div>
             </div>
