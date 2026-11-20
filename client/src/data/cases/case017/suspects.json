@@ -1,0 +1,122 @@
+[
+  {
+    "id": "gregory_vance",
+    "name": "Gregory Vance",
+    "age": 52,
+    "occupation": "Building Superintendent & Master Locksmith",
+    "relation": "Building custodian and keyholder for 14 years (no familial relation)",
+    "personality": "Gruff, defensive, visibly fatigued, nervous around police inquiries",
+    "initialStatement": "I was down in the sub-basement boiler room fixing a blown steam pressure gasket from 11:00 PM until past midnight. I didn't see Timothy Vance, didn't touch the freight elevator, and didn't see anyone strange in the halls. You can inspect my maintenance clipboard.",
+    "background": "Former naval machinist and licensed locksmith. In charge of Meridian Court's physical keys, freight elevators, and boiler machinery. Known to frequent off-track betting parlors.",
+    "motive": "Severe gambling debts ($18,400 overdraft). Susceptible to bribery for access overrides.",
+    "secrets": "Accepted $20,000 in cash to disable basement camera 3 and operate the freight elevator for an illicit medical transport.",
+    "contradictions": [
+      {
+        "id": "contra_gregory_access",
+        "statementQuote": "didn't touch the freight elevator",
+        "evidenceId": "ev_access_card_terminal",
+        "challengeText": "You swore you were in the boiler room, but the security server logged your Master Keycard #2 overriding the 4th floor freight elevator at 11:40 PM and the basement loading dock at 11:52 PM!",
+        "responseConfession": "...Damn digital logs. Look, alright! I was paid five grand upfront and promised fifteen more. Someone called me from a burner phone at 10:00 PM. They said a resident needed private medical extraction without paparazzi or sirens. I just held the freight doors open and cut the camera feed for twelve minutes. I didn't hurt him!",
+        "unlockedClueId": "ev_super_confession"
+      },
+      {
+        "id": "contra_gregory_magnet",
+        "statementQuote": "didn't see anyone strange in the halls",
+        "evidenceId": "ev_neodymium_magnet",
+        "challengeText": "We found this industrial neodymium cylinder magnet inside your locker, wrapped in felt. The brass deadbolt on 4B has identical circular magnetic friction scuffs!",
+        "responseConfession": "I didn't use it on the door! She... the person who hired me asked how our interior deadbolts work. I told them that high-powered rare-earth magnets through the door wood can rotate the brass thumbturn without a key from outside. She made me bring the magnet up to the 4th floor landing at 11:35 PM!",
+        "unlockedClueId": "ev_magnet_admission"
+      }
+    ]
+  },
+  {
+    "id": "corinne_blake",
+    "name": "Corinne Blake",
+    "age": 34,
+    "occupation": "VP of Asset Allocation, Oberlin-Vane Trust",
+    "relation": "Timothy's immediate executive colleague and co-signer on offshore funds",
+    "personality": "Poised, sharp-tongued, fiercely protective of her professional stature",
+    "initialStatement": "Timothy and I had dinner at Bistro Vivienne around 7:30 PM to discuss portfolio yields. I drove straight back to my townhouse in Greenwich and was in bed reading by 10:30 PM. I never returned to Meridian Court tonight.",
+    "background": "High-powered corporate financier managing international capital portfolios. Rumored to be under scrutiny by the Securities & Exchange Commission for unaccounted transaction fees.",
+    "motive": "Timothy was auditing shell company accounts that bore her co-signature, which could end her career.",
+    "secrets": "She returned to Meridian Court at 11:15 PM in panic to confront Timothy, found the door locked, panicked, smoked on the roof terrace, and fled when she heard strange noises in the stairwell.",
+    "contradictions": [
+      {
+        "id": "contra_corinne_volvo",
+        "statementQuote": "drove straight back to my townhouse in Greenwich and was in bed reading by 10:30 PM",
+        "evidenceId": "ev_volvo_ticket",
+        "challengeText": "You claim you were in bed in Greenwich at 10:30 PM, but your silver Volvo is parked in the basement garage right now with a parking ticket stamped 11:15 PM!",
+        "responseConfession": "Fine! I lied about Greenwich. Timothy texted me a spreadsheet snippet that would destroy my life. I drove like hell to Meridian Court to plead with him to delay filing the audit. I took the elevator to 4B at 11:20 PM, but nobody answered when I knocked. I thought he was ignoring me!",
+        "unlockedClueId": "ev_corinne_admission"
+      },
+      {
+        "id": "contra_corinne_roof",
+        "statementQuote": "I never returned to Meridian Court tonight",
+        "evidenceId": "ev_sobranie_cigarette",
+        "challengeText": "Your custom imported Russian Sobranie cigarettes were found crushed in the rooftop maintenance doorway, still damp from tonight's rain.",
+        "responseConfession": "When Timothy didn't open his door, I panicked. I didn't want the concierge to see me waiting outside 4B like a criminal, so I took the stairs to the rooftop to smoke and calm my nerves. While up there around 11:43 PM, I heard a heavy rolling metallic thud below in the service shaft, followed by an engine roaring in the alley. I got terrified and slipped out the side exit!",
+        "unlockedClueId": "ev_roof_witness_account"
+      }
+    ]
+  },
+  {
+    "id": "toby_ray",
+    "name": "Toby Ray",
+    "age": 28,
+    "occupation": "Acoustic Field Engineer & Audio Designer",
+    "relation": "Neighbor in Penthouse 4A, sharing an adjoining wall and ventilation duct",
+    "personality": "Eccentric, hyper-observant, quick-talking, anxious about his electronics",
+    "initialStatement": "I had high-isolation mixing headphones on all night mastering an electronic synth album. The hallway was completely dead silent between 11:00 PM and midnight. I didn't hear a single peep or footstep.",
+    "background": "Freelance sound engineer who records ambient architectural soundscapes. Heavily active on underground audio and corporate espionage forums.",
+    "motive": "Was bribed by an unknown corporate rival to plant an eavesdropping microphone in the shared air vent.",
+    "secrets": "His multichannel audio rig accidentally recorded the entire abduction through his ventilation microphone, including the clink of glassware, a body collapsing, and elevator motor cables engaging at 11:44 PM.",
+    "contradictions": [
+      {
+        "id": "contra_toby_shotgun_mic",
+        "statementQuote": "The hallway was completely dead silent",
+        "evidenceId": "ev_shotgun_mic",
+        "challengeText": "We found a wireless shotgun microphone taped inside the HVAC return vent leading straight into Apartment 4B, transmitter tuned to your studio receiver!",
+        "responseConfession": "Look, don't pin an abduction on me! A private investigator paid me three grand to plant a bug and record Timothy's conversations about some corporate audit. I set it up yesterday afternoon. I swear I never stepped foot inside 4B!",
+        "unlockedClueId": "ev_toby_mic_confession"
+      },
+      {
+        "id": "contra_toby_audio_tape",
+        "statementQuote": "I didn't hear a single peep or footstep",
+        "evidenceId": "ev_toby_audio_recording",
+        "challengeText": "Your multitrack recording software was actively recording at 11:40 PM. There is a crystal-clear recording of a dull thud of someone falling unconscious, followed by freight wheels rolling on the carpet!",
+        "responseConfession": "Alright, play track four! At 11:32 PM, you can hear a woman's voice saying: 'Drink the rest, Timothy, it will ease the palpitation.' Then at 11:38 PM, a heavy collapse onto the sofa. Then at 11:44 PM, a heavy rolling cart wheels out into the corridor! The panic alarm beep didn't happen until 11:47 PM—nine minutes after he was already out cold!",
+        "unlockedClueId": "ev_tape_transcript"
+      }
+    ]
+  },
+  {
+    "id": "dr_eleanor_sterling",
+    "name": "Dr. Eleanor Sterling",
+    "age": 46,
+    "occupation": "Chief Physician, Meridian Aesthetic & Surgical Clinic",
+    "relation": "Timothy Vance's primary care physician and long-time personal acquaintance",
+    "personality": "Controlled, clinical, elegant, speaks with calculated detachment",
+    "initialStatement": "Timothy called my mobile at 10:45 PM complaining of palpitations and severe anxiety over an audit. I advised him to take his mild herbal tea and rest. I remained at my private surgical clinic on East 68th Street all night reviewing patient surgical charts until past 1:00 AM.",
+    "background": "Prominent cosmetic surgeon and wellness clinic operator. Caters to ultra-wealthy clientele with off-book private care, medical transport vehicles, and sedatives.",
+    "motive": "Timothy's forensic audit uncovered $2.4 million in fraudulent medical billing and laundered corporate kickbacks funneled through her private surgical accounts.",
+    "secrets": "Drugged Timothy Vance in person with high-dose Midazolam, orchestrated the locked-room ruse with the superintendent, and transported him to an off-grid medical facility in an unmarked ambulance.",
+    "contradictions": [
+      {
+        "id": "contra_eleanor_visitor_log",
+        "statementQuote": "remained at my private surgical clinic on East 68th Street all night",
+        "evidenceId": "ev_visitor_logbook",
+        "challengeText": "The lobby visitor register at 11:22 PM shows a sign-in for 'Dr. V. Martin' visiting Penthouse 4B. The handwriting matches your medical prescription slants, and the security camera captured your exact calfskin medical bag!",
+        "responseConfession": "...A doctor is entitled to attend a patient in crisis. Timothy was hysterical about his heart. I brought him a concentrated sedative tincture to keep him quiet until the morning. I left him resting on his sofa at 11:35 PM. He was perfectly alive and breathing when I walked out the front door!",
+        "unlockedClueId": "ev_dr_arrival_admission"
+      },
+      {
+        "id": "contra_eleanor_midazolam",
+        "statementQuote": "advised him to take his mild herbal tea",
+        "evidenceId": "ev_discarded_ampoule",
+        "challengeText": "A spent 15mg/3ml ampoule of Midazolam injection with batch number MR-8821 was retrieved from the basement compactor chute. That batch was dispatched exclusively to your private surgical clinic last Tuesday!",
+        "responseConfession": "...You don't understand what Timothy was about to do. He was going to send twenty-four names to the United States Attorney's Office at 9:00 AM on Monday! My clinic, my license, my freedom... all sacrificed for his righteous crusade. He isn't dead—he is heavily sedated in my private recovery retreat in the Catskills where he can't file any indictments until our transfers clear!",
+        "unlockedClueId": "ev_full_criminal_confession"
+      }
+    ]
+  }
+]

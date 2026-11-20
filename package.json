@@ -1,0 +1,26 @@
+{
+  "name": "case017-the-vanishing-hour",
+  "version": "1.0.0",
+  "description": "An interactive detective mystery game web application: CASE 017 — The Vanishing Hour",
+  "private": true,
+  "scripts": {
+    "start": "node server/src/index.js",
+    "server": "node server/src/index.js",
+    "client": "npm --prefix client run dev",
+    "dev": "node scripts/dev.js",
+    "build": "npm --prefix client run build",
+    "test": "node --test tests/**/*.test.js",
+    "install:all": "npm install && npm --prefix client install && npm --prefix server install"
+  },
+  "keywords": [
+    "detective",
+    "mystery",
+    "investigation",
+    "game",
+    "react",
+    "express",
+    "sqlite"
+  ],
+  "author": "",
+  "license": "MIT"
+}

@@ -1,0 +1,121 @@
+{
+  "culpritId": "dr_eleanor_sterling",
+  "accompliceId": "gregory_vance",
+  "methodId": "method_sedation_laundry_stretcher",
+  "motiveId": "motive_embezzlement_coverup",
+  "essentialEvidenceIds": [
+    "ev_whiskey_sedative",
+    "ev_discarded_ampoule",
+    "ev_door_deadbolt_scuffs",
+    "ev_neodymium_magnet",
+    "ev_panic_alarm_timer",
+    "ev_laundry_cart_dna",
+    "ev_audit_spreadsheet"
+  ],
+  "questionOptions": {
+    "whatHappened": [
+      {
+        "id": "what_abduction_sedated",
+        "label": "Abduction via Chemical Sedation & Extraction",
+        "description": "Timothy Vance was drugged with Midazolam in his apartment, rendered unconscious, wheeled out inside an industrial laundry cart to a waiting medical transport van, and held at an off-grid clinic."
+      },
+      {
+        "id": "what_voluntary_disappearance",
+        "label": "Staged Disappearance / Voluntary Flight",
+        "description": "Timothy Vance staged his own disappearance using fake panic alarms and fled the country with embezzled funds."
+      },
+      {
+        "id": "what_homicide_shaft",
+        "label": "Murder & Concealment in Utility Shaft",
+        "description": "Timothy was murdered in his apartment and his body was dropped down the building's disused dumbwaiter shaft."
+      },
+      {
+        "id": "what_rooftop_escape",
+        "label": "Forced Abduction Across Rooftop Parapet",
+        "description": "The perpetrator climbed down from the roof, forced Timothy out onto the terrace, and lowered him down the fire escape."
+      }
+    ],
+    "method": [
+      {
+        "id": "method_sedation_laundry_stretcher",
+        "label": "Midazolam Sedative + Laundry Cart + Magnetic Deadbolt + Decoy Alarm Timer",
+        "description": "Poisoned his scotch with hospital Midazolam; wheeled him down via the freight lift in a canvas cart; engaged the interior deadbolt from outside using an industrial neodymium magnet; used a 6-minute delayed timer on the alarm keypad to forge a false 11:47 PM time of disappearance."
+      },
+      {
+        "id": "method_rooftop_rappelling",
+        "label": "Rooftop Rappel & Fire Escape Extraction",
+        "description": "Extracted through the kitchen window using climbing harnesses and descended the iron fire escape while cameras were offline."
+      },
+      {
+        "id": "method_dumbwaiter_pulley",
+        "label": "Internal Utility Duct Dumbwaiter Pulley",
+        "description": "Lowered through the 6-inch utility conduit behind the coat closet using counterweighted ropes."
+      },
+      {
+        "id": "method_master_key_walkout",
+        "label": "Direct Coercion & Master Keycard Exit",
+        "description": "Held Timothy at gunpoint, walked him down the main staircase, and locked the apartment door with a physical duplicate key."
+      }
+    ],
+    "motive": [
+      {
+        "id": "motive_embezzlement_coverup",
+        "label": "Suppressing the $2.4M Forensic Embezzlement Audit",
+        "description": "Timothy was preparing to deliver evidence of $2.4 million in diverted municipal funds funneled through Meridian Aesthetic Clinic to federal prosecutors on Monday morning."
+      },
+      {
+        "id": "motive_gambling_extortion",
+        "label": "Extorting Funds to Settle Superintendent Gambling Debts",
+        "description": "A kidnapping for ransom executed to pay off Gregory Vance's urgent $18,400 bank overdraft and loan shark debts."
+      },
+      {
+        "id": "motive_corporate_espionage",
+        "label": "Industrial Wiretapping & Portfolio Theft",
+        "description": "Toby Ray and corporate competitors seeking to steal proprietary quantitative trading algorithms from Timothy's ThinkPad."
+      },
+      {
+        "id": "motive_personal_vendetta",
+        "label": "Romantic or Domestic Spite",
+        "description": "A crime of passion arising from a personal dispute between Timothy and Corinne Blake."
+      }
+    ]
+  },
+  "endings": {
+    "perfect_resolution": {
+      "verdict": "PERFECT RESOLUTION",
+      "grade": "S",
+      "title": "CASE CLOSED: The Airtight Indictment",
+      "summary": "Your deduction was flawless in every dimension. Armed with your comprehensive indictment, the District Attorney dispatched state troopers to Dr. Eleanor Sterling's private recovery estate in the Catskills at 3:14 AM. Timothy Vance was rescued unharmed, still recovering from heavy sedation. Dr. Sterling and Gregory Vance were arrested simultaneously. With the magnetic deadbolt mechanism demonstrated in court, the forensic Midazolam match, and the delayed alarm log proving the false timeline, both perpetrators pled guilty to conspiracy, kidnapping, and financial fraud.",
+      "epilogue": "The Vanishing Hour will be studied in forensic academies for decades: a masterclass in proving that no matter how sealed a room appears, the truth always leaves a physical and chronological trace."
+    },
+    "correct_suspect_flawed_method": {
+      "verdict": "MOSTLY CORRECT",
+      "grade": "B",
+      "title": "A CONVICTION ON TECHNICALITIES",
+      "summary": "You identified Dr. Eleanor Sterling as the mastermind, but your explanation of the physical locked-room mechanics or timeline contained notable errors. The defense team attempted to argue reasonable doubt regarding how the door was sealed from inside. However, the batch-matched Midazolam ampoule and financial audit trail proved sufficient for a jury conviction on kidnapping and embezzlement.",
+      "epilogue": "Dr. Sterling was sentenced to 18 years in federal penitentiary, though legal commentators noted the state's reconstruction of the apartment's physical security was incomplete."
+    },
+    "incomplete_case": {
+      "verdict": "PARTIALLY CORRECT",
+      "grade": "C",
+      "title": "THE HUNG JURY",
+      "summary": "You correctly suspected Dr. Sterling, but presented insufficient corroborating evidence to withstand aggressive cross-examination. Key physical proof—such as the neodymium magnet scuffs and the programmed panic alarm delay—was omitted. The defense successfully argued that the victim could have disappeared voluntarily or that third parties were responsible for the alarm at 11:47 PM.",
+      "epilogue": "A mistrial was declared after three days of hung jury deliberations. Timothy Vance was eventually recovered, but the criminal case against Dr. Sterling ended in a plea to minor regulatory infractions."
+    },
+    "missed_critical_evidence": {
+      "verdict": "PARTIALLY CORRECT",
+      "grade": "D",
+      "title": "THE SHADOW OF REASONABLE DOUBT",
+      "summary": "Although you pointed at the right medical culprit, your indictment lacked essential forensic cornerstones. Without the DNA match in the laundry hamper or the digital keycard trail from Gregory Vance, the prosecution's case crumbled under scrutiny.",
+      "epilogue": "Dr. Sterling posted bail and fled international jurisdiction aboard a private chartered flight to a non-extradition nation before federal marshals could reconstruct the true timeline."
+    },
+    "wrong_accusation": {
+      "verdict": "INCORRECT",
+      "grade": "F",
+      "title": "THE MISCARRIAGE OF JUSTICE",
+      "summary": "You formally accused the wrong individual. While your target may have possessed secrets or red herrings—such as Corinne's panic visit or Toby's illicit wiretapping—they were completely innocent of the abduction. The true culprit, Dr. Eleanor Sterling, walked out of the precinct unimpeded, having destroyed the remaining audit records.",
+      "epilogue": "Weeks later, an anonymous tip led police to an abandoned upstate medical facility, but the mastermind was already thousands of miles away. The department suspended your investigator badge pending internal review."
+    }
+  },
+  "fullDebrief": "The Vanishing Hour was an engineered illusion. The abductor, Dr. Eleanor Sterling, learned at 10:45 PM that Timothy Vance's forensic audit was complete and would be filed with the DOJ on Monday morning, exposing $2.4M in medical money laundering. Disguised as 'Dr. V. Martin', she arrived at 11:24 PM with liquid Midazolam, gaining entry as his trusted physician. She poisoned his scotch at 11:32 PM. Timothy collapsed at 11:38 PM.\n\nTo manufacture an airtight alibi and confuse responders, she programmed a +6 minute delayed test alarm into the Honeywell panel at 11:41 PM, timed to scream at 11:47 PM. Having bribed Superintendent Gregory Vance for $20,000 to hold the freight elevator and blackout Camera 03, she loaded Timothy into an industrial canvas laundry cart at 11:44 PM. Before wheeling the cart into the lift, they used a 180-lb neodymium cylinder magnet on the exterior door face to drag the brass thumbturn shut from the outside hallway.\n\nWhen police arrived in response to the 11:47 PM alarm, they found a room deadbolted from the inside and assumed the victim had vanished moments before—completely unaware that Timothy had already been loaded into an unmarked ambulance in the basement bay at 11:52 PM and driven away."
+}

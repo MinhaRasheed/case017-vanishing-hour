@@ -1,0 +1,34 @@
+{
+  "id": "case017",
+  "caseNumber": "017",
+  "title": "The Vanishing Hour",
+  "subtitle": "The Locked Penthouse Disappearance",
+  "incidentDate": "Friday, November 14, 2026",
+  "incidentTime": "Approximately 11:47 PM",
+  "location": "The Meridian Court Residences, Penthouse 4B",
+  "difficulty": "Hard",
+  "estimatedTime": "35 - 50 mins",
+  "victim": {
+    "name": "Timothy C. Vance",
+    "age": 39,
+    "occupation": "Senior Forensic Comptroller, Oberlin-Vane Trust",
+    "status": "Missing / Presumed Abducted",
+    "description": "A meticulous, cautious accountant known for auditing corporate balance sheets and municipal bond funds. Lived alone in Penthouse 4B with high-grade security systems.",
+    "lastKnownActivity": "Reviewed encrypted financial spreadsheets until 10:40 PM. Phone call logged at 10:45 PM. Panic sensor tripped at 11:47 PM."
+  },
+  "summary": "At 11:47 PM, a silent panic signal pinged the Meridian Court security desk from Penthouse 4B. Responding officers and building staff found the reinforced oak entry door deadbolted from the inside. When the door was forced open 18 minutes later, the apartment was completely empty. The kitchen window—four stories above an alleyway—was locked from the inside with intact weather stripping. A crystal tumbler of whiskey was half-empty on the coffee table, a laptop remained open to an audit file, and the victim's wallet, coat, and smartphone were untouched. Timothy Vance had vanished without leaving through any known exit.",
+  "incidentFacts": [
+    "The front door had a mechanical brass deadbolt engaged from the interior.",
+    "The exterior windows are 80 feet above street level and were locked securely.",
+    "There are no trapdoors, secret panels, or roof skylights in the living space.",
+    "Four persons with keycards or building access were on the property between 10:30 PM and midnight.",
+    "The building's basement loading bay security camera footage experienced a 12-minute blackout."
+  ],
+  "investigationDirectives": [
+    "Scour all 6 crime scenes for physical, digital, and forensic traces.",
+    "Interrogate the 4 persons of interest and expose false alibis using contradictions.",
+    "Reconstruct the chronological timeline of the crucial hour (10:45 PM - 12:15 AM).",
+    "Unravel the physics of the locked room: how was the apartment sealed from within?",
+    "Formulate a complete indictment specifying Culprit, Method, Motive, and Key Evidence."
+  ]
+}

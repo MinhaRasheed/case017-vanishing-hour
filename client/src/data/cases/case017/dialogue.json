@@ -1,0 +1,133 @@
+{
+  "gregory_vance": {
+    "greeting": "Make it quick, detective. I've got a building full of angry tenants and leaking boiler valves to deal with.",
+    "topics": [
+      {
+        "id": "topic_whereabouts",
+        "label": "Where were you between 11:00 PM and midnight?",
+        "response": "I told the uniform officer already: sub-basement boiler room. Boiler pressure was spiking on manifold four. I was down there with a pipe wrench until after midnight. You can check my maintenance log."
+      },
+      {
+        "id": "topic_victim",
+        "label": "How well did you know Timothy Vance?",
+        "response": "Mr. Vance kept to himself. Always in a suit, always carried a heavy briefcase. He paid his maintenance fee on the first of the month like clockwork. Never caused trouble."
+      },
+      {
+        "id": "topic_locked_room",
+        "label": "Could anyone have entered 4B without a key?",
+        "response": "Impossible. Those doors are solid oak with heavy brass deadbolts. If that thumbturn was thrown from the inside, nobody gets in without the police battering ram."
+      },
+      {
+        "id": "topic_super_debts",
+        "label": "About your financial troubles...",
+        "requiresClueId": "ev_pawn_slip_overdraft",
+        "response": "Who gave you permission to snoop in my mail?! Look, my betting habits are my personal business. That doesn't make me a criminal."
+      },
+      {
+        "id": "topic_super_lift",
+        "label": "Explain the 11:40 PM freight elevator swipe.",
+        "requiresClueId": "ev_access_card_terminal",
+        "response": "I... I told you what happened. A client paid me five grand to hold the freight lift. I was just following instructions, I swear I didn't lay hands on Mr. Vance!"
+      }
+    ]
+  },
+  "corinne_blake": {
+    "greeting": "I hope you have a warrant or a very compelling reason to detain me, detective. My time is extremely valuable.",
+    "topics": [
+      {
+        "id": "topic_whereabouts",
+        "label": "Where were you around 11:30 PM?",
+        "response": "As I stated earlier, I was at home in my Greenwich townhouse. After dinner with Timothy at 7:30, I drove straight home and was tucked in with tea by 10:30 PM."
+      },
+      {
+        "id": "topic_victim",
+        "label": "What was the nature of your meeting with Timothy tonight?",
+        "response": "Routine quarterly asset allocations. We discussed municipal bond projections. Timothy was high-strung, as usual, but nothing out of the ordinary."
+      },
+      {
+        "id": "topic_audit_confront",
+        "label": "He was auditing your offshore shell company, wasn't he?",
+        "requiresClueId": "ev_audit_spreadsheet",
+        "response": "That audit was a preliminary internal draft! Timothy was misinterpreting standard capital repatriation structures. Accusing me of fraud is defamation, detective."
+      },
+      {
+        "id": "topic_umbrella",
+        "label": "We found your wet monogrammed umbrella in the lobby.",
+        "requiresClueId": "ev_corinne_umbrella",
+        "response": "I... I must have left it behind days ago. It rains frequently in November, surely that's not your entire case?"
+      },
+      {
+        "id": "topic_volvo",
+        "label": "Your car was parked in the basement at 11:15 PM.",
+        "requiresClueId": "ev_volvo_ticket",
+        "response": "Fine! I went there to speak with him. I knocked on 4B at 11:20 PM, but he never answered. I swear I never stepped foot inside his flat!"
+      }
+    ]
+  },
+  "toby_ray": {
+    "greeting": "Hey man, can we keep the siren lights down? I've got severe sensory migraine issues when mastering audio.",
+    "topics": [
+      {
+        "id": "topic_whereabouts",
+        "label": "What were you doing between 11:00 PM and midnight?",
+        "response": "I was wearing custom Beyerdynamic planar headphones with active noise cancellation, mixing a cinematic ambient drone score. Total sensory isolation, man."
+      },
+      {
+        "id": "topic_victim",
+        "label": "Did you ever interact with Timothy Vance?",
+        "response": "He complained once about bass frequencies vibrating his floorboards, so I put acoustic dampeners under my monitors. Otherwise, totally cordial guy."
+      },
+      {
+        "id": "topic_taped_peephole",
+        "label": "Why was your doorbell camera taped over?",
+        "requiresClueId": "ev_taped_peephole",
+        "response": "Hey, I value privacy! Landlords and supers are always walking the corridors. I don't need facial recognition logging my lifestyle."
+      },
+      {
+        "id": "topic_shotgun_mic",
+        "label": "What was your microphone doing inside the 4B air vent?",
+        "requiresClueId": "ev_shotgun_mic",
+        "response": "Look, I got offered cash to record room acoustics... alright, a corporate investigator paid me! But I never went inside his place!"
+      },
+      {
+        "id": "topic_audio_tape",
+        "label": "Tell us what your tape recorded at 11:38 PM.",
+        "requiresClueId": "ev_toby_audio_recording",
+        "response": "Track four has a woman's voice telling him to drink, then a collapse, then wheels rolling down the hall at 11:44 PM. The 11:47 PM panic alarm was totally staged!"
+      }
+    ]
+  },
+  "dr_eleanor_sterling": {
+    "greeting": "Good evening, detective. How may I assist with Timothy's welfare? I am deeply concerned for my patient.",
+    "topics": [
+      {
+        "id": "topic_whereabouts",
+        "label": "Where were you at the time of the disappearance?",
+        "response": "I was at my private surgical clinic on East 68th Street all evening. I had multiple post-operative charts to review and update."
+      },
+      {
+        "id": "topic_victim",
+        "label": "When did you last speak with Timothy?",
+        "response": "He called my mobile at approximately 10:45 PM. He sounded remarkably agitated, complaining of chest constriction and insomnia. I urged him to drink warm chamomile tea and rest."
+      },
+      {
+        "id": "topic_audit",
+        "label": "Timothy's audit flagged your clinic for $2.4M in diverted funds.",
+        "requiresClueId": "ev_audit_spreadsheet",
+        "response": "Timothy's accounting lacked context. Those funds were research endowments and specialized surgical equipment allocations. Completely lawful."
+      },
+      {
+        "id": "topic_visitor_log",
+        "label": "You signed the lobby register as 'Dr. V. Martin' at 11:22 PM.",
+        "requiresClueId": "ev_visitor_logbook",
+        "response": "I was providing confidential emergency palliative care to a patient who requested discretion. Timothy was agitated, so I gave him a mild prescription and left."
+      },
+      {
+        "id": "topic_midazolam",
+        "label": "A spent vial of Midazolam from your clinic was found in the basement.",
+        "requiresClueId": "ev_discarded_ampoule",
+        "response": "...You have been exceedingly thorough, detective. But Timothy is unharmed. He was going to destroy everything I built for a clerical technicality."
+      }
+    ]
+  }
+}

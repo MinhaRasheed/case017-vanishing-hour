@@ -1,0 +1,344 @@
+[
+  {
+    "id": "apartment_4b",
+    "name": "Penthouse Apartment 4B",
+    "category": "Primary Crime Scene",
+    "description": "A high-ceilinged modern penthouse. The apartment is unnervingly undisturbed: the soft hum of the laptop fan, a warm reading lamp, a half-empty tumbler of scotch on the glass table. But Timothy Vance is completely gone.",
+    "atmosphericNotes": "Rain taps against the exterior double-glazed panes. Scent of oakwood, leather, and a faint sterile undertone reminiscent of hospital antiseptic.",
+    "inspectables": [
+      {
+        "id": "obj_deadbolt",
+        "name": "Heavy Brass Deadbolt",
+        "category": "Physical Forensic",
+        "x": 12,
+        "y": 48,
+        "description": "The heavy reinforced front door lock with an interior mechanical thumbturn latch. Currently disengaged by police forced entry.",
+        "inspectionText": "Forensic flashlight and jeweler's loupe reveal distinct microscopic circular scuffs in the brass patina around the thumbturn cylinder. A concentrated magnetic field could rotate this thumbturn through the 1.5-inch solid timber door from the outside corridor.",
+        "revealedEvidenceId": "ev_door_deadbolt_scuffs",
+        "hint": "Examine the scratch patterns around the thumbturn."
+      },
+      {
+        "id": "obj_whiskey_glass",
+        "name": "Glencairn Whiskey Glass",
+        "category": "Chemical Forensic",
+        "x": 48,
+        "y": 62,
+        "description": "A crystal tumbler sitting on a coaster beside Timothy's reading chair. About an ounce of amber liquid remains.",
+        "inspectionText": "Rapid chemical reagent test yields an immediate purple reaction: high concentration of dissolved Midazolam, a fast-acting water-soluble benzodiazepine sedative used in clinical anesthesia. Tasteless when mixed into aged scotch.",
+        "revealedEvidenceId": "ev_whiskey_sedative",
+        "hint": "Test the amber liquid for chemical adulterants."
+      },
+      {
+        "id": "obj_laptop",
+        "name": "Workstation Laptop",
+        "category": "Digital Document",
+        "x": 65,
+        "y": 45,
+        "description": "Timothy's ThinkPad workstation, logged in and illuminated. An encrypted Excel workbook is active.",
+        "inspectionText": "The file is titled 'Oberlin_Trust_Q4_Forensic_Audit_Draft.xlsx'. Column G flags $2,420,000 in diverted municipal bonds routed to 'Meridian Aesthetic & Surgical Clinic' (account signatory: Dr. Eleanor Sterling) and 'Aegis Horizon LLC' (co-signed by Corinne Blake). A memo notes: 'Handover to Dept of Justice scheduled Monday 9:00 AM.'",
+        "revealedEvidenceId": "ev_audit_spreadsheet",
+        "hint": "Read the open financial spreadsheet and flagged entities."
+      },
+      {
+        "id": "obj_panic_panel",
+        "name": "Security Alarm Console",
+        "category": "Digital Electronics",
+        "x": 22,
+        "y": 30,
+        "description": "Wall-mounted Honeywell digital alarm panel next to the master bedroom door.",
+        "inspectionText": "Accessing the diagnostic event log reveals a startling anomaly: Event #9921 shows a 'Delayed Diagnostic Alert Test' was manually configured at 11:41 PM with a +6 minute countdown timer. The panic signal at 11:47 PM was NOT tripped by a person in real time—it was an automated delayed trigger!",
+        "revealedEvidenceId": "ev_panic_alarm_timer",
+        "hint": "Examine the alarm system's internal timer log."
+      },
+      {
+        "id": "obj_closet_panel",
+        "name": "Coat Closet Access Hatch",
+        "category": "Physical Architectural",
+        "x": 84,
+        "y": 52,
+        "description": "Behind Timothy's hanging winter coats is a rectangular metal access panel to the building's central utility riser.",
+        "inspectionText": "Two thumb-screws have been unscrewed and left on the baseboard. The panel opens into a vertical conduit shaft housing telecom cables and a disused 1930s service dumbwaiter pulley. However, the shaft is choked with thick steel pipes—no adult could climb down.",
+        "revealedEvidenceId": "ev_service_shaft_hatch",
+        "isRedHerring": true,
+        "hint": "Check if an adult human could actually fit down this shaft."
+      },
+      {
+        "id": "obj_kitchen_window",
+        "name": "Kitchen Alleyway Window",
+        "category": "Physical Structure",
+        "x": 35,
+        "y": 25,
+        "description": "Double-hung sash window overlooking the narrow concrete alleyway 80 feet below.",
+        "inspectionText": "The brass cam lock is secured tightly from inside. The sill is coated in undisturbed dust and old latex paint. No ropes, grappling hooks, or smudges. An exit via this window is physically impossible without breaking the glass or disturbing the sill.",
+        "revealedEvidenceId": "ev_sealed_kitchen_window",
+        "hint": "Check the window latch and dust undisturbed on the sill."
+      }
+    ]
+  },
+  {
+    "id": "hallway_4th",
+    "name": "4th Floor Corridor & Service Landing",
+    "category": "Secondary Scene",
+    "description": "A long, dimly lit carpeted hallway with wood paneling. Doors lead to Penthouse 4A, Penthouse 4B, the fire stairwell, and the heavy industrial freight elevator.",
+    "atmosphericNotes": "The carpet muffles footsteps completely. A soft mechanical hum vibrates through the floorboards from the elevator shaft.",
+    "inspectables": [
+      {
+        "id": "obj_carpet_runner",
+        "name": "Crimson Carpet Runner",
+        "category": "Physical Forensic",
+        "x": 45,
+        "y": 70,
+        "description": "High-pile wool carpet running the length of the 4th floor corridor between 4B and the freight elevator.",
+        "inspectionText": "Oblique raking light reveals twin parallel compression tracks (wheel width 2.2 inches, axle span 30 inches) pressed into the damp wool fibers. The tracks start right outside Penthouse 4B and lead directly to the freight elevator sliding doors.",
+        "revealedEvidenceId": "ev_carpet_wheel_treads",
+        "hint": "Use raking light on the damp carpet fibers."
+      },
+      {
+        "id": "obj_4a_door",
+        "name": "Penthouse 4A Door",
+        "category": "Physical Witness",
+        "x": 20,
+        "y": 42,
+        "description": "Apartment door of neighbor Toby Ray. A modern electronic video doorbell is mounted at eye level.",
+        "inspectionText": "A clean square of black PVC electrical tape has been smoothed over the lens of the video camera. Examining Toby's studio threshold reveals audio cable connectors and the faint aroma of freshly burnt cloves.",
+        "revealedEvidenceId": "ev_taped_peephole",
+        "hint": "Inspect the camera lens on Toby Ray's doorbell."
+      },
+      {
+        "id": "obj_freight_doors",
+        "name": "Freight Elevator Doors",
+        "category": "Architectural Mechanism",
+        "x": 75,
+        "y": 40,
+        "description": "Heavy bi-parting steel industrial doors with a keyed master override switch.",
+        "inspectionText": "The keyhole and RFID sensor display fresh brass flakes. The indicator light shows the cab is locked at the Sub-Basement loading dock level. The emergency hold feature was clearly engaged tonight.",
+        "revealedEvidenceId": "ev_freight_elevator_scuffs",
+        "hint": "Check the lock cylinder and floor indicator."
+      },
+      {
+        "id": "obj_stairwell_alarm",
+        "name": "Fire Stairwell Door",
+        "category": "Physical Security",
+        "x": 90,
+        "y": 55,
+        "description": "Heavy fire-rated door leading down to the lobby and up to the rooftop.",
+        "inspectionText": "The magnetic alarm sensor wire at the top right of the frame has been cleanly sheared with surgical wire cutters, preventing the door chime from sounding when opened tonight.",
+        "revealedEvidenceId": "ev_severed_alarm_wire",
+        "hint": "Check the alarm contacts on the top door frame."
+      }
+    ]
+  },
+  {
+    "id": "lobby",
+    "name": "Main Lobby & Reception Vestibule",
+    "category": "Public Transition Area",
+    "description": "An opulent 1930s art-deco foyer featuring black terrazzo flooring, polished brass mailboxes, a marble concierge counter, and elevator banks.",
+    "atmosphericNotes": "Echoing sound of street traffic and storm wind outside the glass revolving doors.",
+    "inspectables": [
+      {
+        "id": "obj_logbook",
+        "name": "Visitor Sign-In Register",
+        "category": "Document Evidence",
+        "x": 50,
+        "y": 58,
+        "description": "A bound leather logbook kept on the reception counter for late-night guest sign-ins.",
+        "inspectionText": "Entry for 11:22 PM reads: 'Dr. V. Martin, MD — Apt 4B — Emergency Medical Consult'. The signature contains distinctive stylized medical loops and a terminal flourish identical to Dr. Eleanor Sterling's prescription records.",
+        "revealedEvidenceId": "ev_visitor_logbook",
+        "hint": "Read the late-night guest log entries around 11:20 PM."
+      },
+      {
+        "id": "obj_cctv_monitor",
+        "name": "Reception CCTV Monitor",
+        "category": "Digital Surveillance",
+        "x": 68,
+        "y": 42,
+        "description": "Color monitor displaying live camera feeds of the lobby entrance, vestibule, and mail area.",
+        "inspectionText": "Scrubbing back to 11:24 PM shows a tall woman in a dark hooded trench coat carrying a structured calfskin medical doctor's kit. She enters through the side disabled ramp door using a guest bypass code and proceeds directly to the service stairwell.",
+        "revealedEvidenceId": "ev_lobby_cctv_still",
+        "hint": "Review the recorded vestibule camera footage at 11:24 PM."
+      },
+      {
+        "id": "obj_mailboxes",
+        "name": "Superintendent's Mail Pigeonhole",
+        "category": "Financial Document",
+        "x": 25,
+        "y": 45,
+        "description": "Brass mailbox labeled 'G. Vance — Maintenance & Building Super'.",
+        "inspectionText": "Contains a final notice overdraft letter from Chase Bank ($18,410 overdue) and a pawn receipt from Midtown Gold & Jewelry for a vintage Rolex Submariner redeemed today for $4,200 cash.",
+        "revealedEvidenceId": "ev_pawn_slip_overdraft",
+        "hint": "Inspect the mail inside Gregory Vance's pigeonhole."
+      },
+      {
+        "id": "obj_umbrella_stand",
+        "name": "Brass Umbrella Stand",
+        "category": "Physical Item",
+        "x": 15,
+        "y": 65,
+        "description": "A tall brass umbrella cylinder near the revolving exterior door.",
+        "inspectionText": "A designer Burberry umbrella with a monogrammed handle 'C.B.' (Corinne Blake). It is dripping wet, confirming Corinne was on the premises during the torrential 11:15 PM rainstorm.",
+        "revealedEvidenceId": "ev_corinne_umbrella",
+        "hint": "Examine the umbrellas for initials and wet fabric."
+      }
+    ]
+  },
+  {
+    "id": "security_room",
+    "name": "Building Security & Surveillance Room",
+    "category": "Technical Hub",
+    "description": "A cramped basement control room packed with CCTV servers, electronic keycard readers, master key hooks, and staff lockers.",
+    "atmosphericNotes": "Chilled air from server cooling racks. Rhythmic blinking green and amber LED arrays.",
+    "inspectables": [
+      {
+        "id": "obj_access_terminal",
+        "name": "Keycard Server Terminal",
+        "category": "Digital Audit Log",
+        "x": 42,
+        "y": 46,
+        "description": "The central computer monitoring all RFID door strikes, freight lifts, and gate gates.",
+        "inspectionText": "Log printout: \n11:12 PM - Master Keycard #2 (G. Vance) - Sub-Basement Workshop\n11:40 PM - Master Keycard #2 (G. Vance) - 4th Floor Freight Lift Manual Override\n11:52 PM - Master Keycard #2 (G. Vance) - Basement Loading Dock Exit Bay Door\n12:04 AM - Master Keycard #2 (G. Vance) - Lobby Return",
+        "revealedEvidenceId": "ev_access_card_terminal",
+        "hint": "Download the keycard access logs for Master Keycard #2."
+      },
+      {
+        "id": "obj_dvr_server",
+        "name": "Camera 03 DVR Channel",
+        "category": "Digital Surveillance",
+        "x": 65,
+        "y": 38,
+        "description": "Dedicated digital video server for the underground garage and loading docks.",
+        "inspectionText": "Camera 03 (Loading Bay) records steady video until exactly 11:41:10 PM, where it drops to blue screen until 11:53:25 PM. The disconnection log states: 'Manual switch disconnect at panel B-4'.",
+        "revealedEvidenceId": "ev_corrupted_cam3_feed",
+        "hint": "Check the timestamp gaps on Camera 03."
+      },
+      {
+        "id": "obj_wastebasket",
+        "name": "Steel Wastebasket",
+        "category": "Document Forensic",
+        "x": 18,
+        "y": 72,
+        "description": "A wire mesh trash can underneath the supervisor's desk.",
+        "inspectionText": "A crumpled lined memo page reads: 'Kill Cam 3 at 11:40 sharp. Hold freight lift at 4th floor. 20k balance delivered to private box'. Handwriting analysis matches the clinic note pad of Dr. Eleanor Sterling.",
+        "revealedEvidenceId": "ev_torn_bribery_note",
+        "hint": "Uncrumple the handwritten note in the wastebasket."
+      },
+      {
+        "id": "obj_super_locker",
+        "name": "Locker #01 (Gregory Vance)",
+        "category": "Physical Tool",
+        "x": 88,
+        "y": 50,
+        "description": "Steel locker with 'G. Vance' stenciled on the louvered door.",
+        "inspectionText": "Inside a tool roll is an extremely high-strength Neodymium NdFeB rare-earth cylindrical retrieval magnet (pull force 180 lbs) wrapped in microfiber felt. Brass scuffs on the magnetic face match the deadbolt thumbturn of Penthouse 4B!",
+        "revealedEvidenceId": "ev_neodymium_magnet",
+        "hint": "Search the tool rolls inside Gregory Vance's locker."
+      }
+    ]
+  },
+  {
+    "id": "rooftop",
+    "name": "Rooftop Terrace & HVAC Access",
+    "category": "Exterior Scene",
+    "description": "An expansive asphalt rooftop with decorative brick parapets, massive cooling towers, elevator motor penthouses, and ventilation ducts overlooking the stormy skyline.",
+    "atmosphericNotes": "Wind howling through radio masts. Rain puddles shimmering in the ambient city glow.",
+    "inspectables": [
+      {
+        "id": "obj_hvac_grill",
+        "name": "Apt 4B HVAC Exhaust Riser",
+        "category": "Surveillance Device",
+        "x": 52,
+        "y": 60,
+        "description": "A heavy galvanized steel ventilation cowl venting air from the 4th floor penthouses.",
+        "inspectionText": "Concealed inside the louvers is a Sennheiser directional shotgun microphone connected to a UHF audio transmitter. Frequency is locked to 915.4 MHz—the exact studio receiver frequency used by neighbor Toby Ray!",
+        "revealedEvidenceId": "ev_shotgun_mic",
+        "hint": "Peer inside the metal exhaust louvers."
+      },
+      {
+        "id": "obj_roof_door",
+        "name": "Rooftop Maintenance Alcove",
+        "category": "Physical Trace",
+        "x": 28,
+        "y": 48,
+        "description": "A sheltered brick alcove providing cover from the rain next to the stairwell exit.",
+        "inspectionText": "Found on the wet asphalt: two crushed cigarette butts of Sobranie Black Russian gold-foil filter cigarettes. The lipstick residue is Chanel Rouge Allure #99—the signature shade worn by Corinne Blake.",
+        "revealedEvidenceId": "ev_sobranie_cigarette",
+        "hint": "Check the sheltered dry nook behind the stairwell door."
+      },
+      {
+        "id": "obj_boot_print",
+        "name": "Muddy Parapet Railing",
+        "category": "Forensic Impression",
+        "x": 78,
+        "y": 68,
+        "description": "The decorative stone parapet wall directly above Penthouse 4B's terrace.",
+        "inspectionText": "A distinct size 9 Vibram lug-sole boot print pressed into mossy soot. Matches the Red Wing heritage boots worn by Toby Ray. He climbed out onto the roof to adjust his surveillance microphone earlier tonight.",
+        "revealedEvidenceId": "ev_muddy_boot_print",
+        "hint": "Examine the soot and moss on the terrace parapet."
+      },
+      {
+        "id": "obj_fire_escape",
+        "name": "Emergency Fire Ladder",
+        "category": "Architectural Route",
+        "x": 12,
+        "y": 35,
+        "description": "An iron ladder descending down the exterior brick wall into the dark back alley.",
+        "inspectionText": "The padlock securing the counterbalance drop ladder is intact and rusted shut with spiderwebs. No one has descended this emergency ladder in months.",
+        "revealedEvidenceId": "ev_fire_escape_scrapes",
+        "isRedHerring": true,
+        "hint": "Inspect the rusted counterweight and spiderwebs on the ladder."
+      }
+    ]
+  },
+  {
+    "id": "parking_garage",
+    "name": "Subterranean Parking & Loading Bay",
+    "category": "Underground Transport Scene",
+    "description": "A cavernous concrete basement with resident vehicle bays, concrete pillars, industrial trash compactors, and the freight elevator loading portal.",
+    "atmosphericNotes": "Smell of exhaust fumes, damp cement, and lingering antiseptic sanitizing spray.",
+    "inspectables": [
+      {
+        "id": "obj_laundry_cart",
+        "name": "Heavy Industrial Laundry Cart",
+        "category": "Key Physical Evidence",
+        "x": 62,
+        "y": 55,
+        "description": "A heavy-duty 400-liter canvas hamper on large 5-inch vulcanized rubber casters parked near the freight lift landing.",
+        "inspectionText": "The wheel axle measurements and tread pattern match the carpet impressions outside Penthouse 4B down to the millimeter! Luminol spray inside the canvas lining reveals biological traces: saliva and epidermal skin cells matching Timothy Vance, alongside traces of hospital medical linen sanitizing spray.",
+        "revealedEvidenceId": "ev_laundry_cart_dna",
+        "hint": "Run forensic Luminol spray on the interior canvas liner."
+      },
+      {
+        "id": "obj_trash_compactor",
+        "name": "Basement Refuse Compactor",
+        "category": "Chemical Forensic",
+        "x": 82,
+        "y": 62,
+        "description": "The stainless steel hopper where the building's central trash chute empties.",
+        "inspectionText": "Retrieved from the top of the uncompressed cardboard recycling: an empty glass pharmaceutical vial labeled 'Midazolam Injection USP, 15mg/3ml'. The manufacturer batch code is #MR-8821. State pharmaceutical registry confirms batch MR-8821 was delivered to Meridian Aesthetic & Surgical Clinic.",
+        "revealedEvidenceId": "ev_discarded_ampoule",
+        "hint": "Examine the uncompacted medical waste in the recycling hopper."
+      },
+      {
+        "id": "obj_volvo_sedan",
+        "name": "Silver Volvo Sedan (Bay 06)",
+        "category": "Vehicular Evidence",
+        "x": 22,
+        "y": 58,
+        "description": "A 2024 Volvo S90 sedan registered to Corinne Blake, parked crookedly in visitor space #06.",
+        "inspectionText": "The engine block is still warm to touch. Tucked into the windshield parking clip is an automated entry stub timestamped tonight at 11:15 PM! Proves conclusively she lied about being in bed in Greenwich at 10:30 PM.",
+        "revealedEvidenceId": "ev_volvo_ticket",
+        "hint": "Check the engine temperature and the parking ticket stub."
+      },
+      {
+        "id": "obj_loading_bay",
+        "name": "Loading Bay Exit Portal",
+        "category": "Physical Forensic",
+        "x": 44,
+        "y": 42,
+        "description": "The roll-up motorized shutter leading to the rear private service alley.",
+        "inspectionText": "Wet asphalt in the bay reveals fresh dual-rear-wheel tire impressions matching a Mercedes Sprinter high-roof private patient transport van. The tire marks accelerate rapidly out into the alley at 11:58 PM.",
+        "revealedEvidenceId": "ev_ambulance_tire_tracks",
+        "hint": "Analyze the dual-wheel tread tracks leading out the roll-up gate."
+      }
+    ]
+  }
+]

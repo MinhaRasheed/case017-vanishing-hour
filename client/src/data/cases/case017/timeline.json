@@ -1,0 +1,137 @@
+[
+  {
+    "id": "evt_1015",
+    "timeStr": "10:15 PM",
+    "timestampMinutes": 15,
+    "title": "Confrontation Message Sent",
+    "status": "confirmed",
+    "trueDescription": "Corinne Blake sends an urgent text to Timothy Vance demanding an immediate meeting regarding the audit leak.",
+    "evidenceId": "ev_audit_spreadsheet",
+    "suspectId": "corinne_blake",
+    "notes": "Corinne was panicked about her offshore accounts being flagged in Timothy's audit."
+  },
+  {
+    "id": "evt_1045",
+    "timeStr": "10:45 PM",
+    "timestampMinutes": 45,
+    "title": "Medical Consultation Call",
+    "status": "confirmed",
+    "trueDescription": "Timothy calls Dr. Eleanor Sterling's personal mobile complaining of heart palpitations and extreme stress.",
+    "evidenceId": "ev_whiskey_sedative",
+    "suspectId": "dr_eleanor_sterling",
+    "notes": "Dr. Sterling promised to bring him a fast-acting restorative sedative."
+  },
+  {
+    "id": "evt_1115",
+    "timeStr": "11:15 PM",
+    "timestampMinutes": 75,
+    "title": "Volvo Arrives at Meridian Court",
+    "status": "contradicted",
+    "trueDescription": "Corinne Blake drives into the subterranean visitor garage in her silver Volvo and parks in bay 06.",
+    "evidenceId": "ev_volvo_ticket",
+    "suspectId": "corinne_blake",
+    "conflictingStatement": "Corinne claims she was in bed reading in Greenwich by 10:30 PM.",
+    "notes": "Parking ticket stamped 11:15 PM proves her alibi was completely fabricated."
+  },
+  {
+    "id": "evt_1122",
+    "timeStr": "11:22 PM",
+    "timestampMinutes": 82,
+    "title": "False-Name Lobby Sign-In",
+    "status": "contradicted",
+    "trueDescription": "Dr. Eleanor Sterling signs the reception guest book as 'Dr. V. Martin' and heads up the service stairwell.",
+    "evidenceId": "ev_visitor_logbook",
+    "suspectId": "dr_eleanor_sterling",
+    "conflictingStatement": "Dr. Sterling claims she was at her East 68th Street clinic all evening.",
+    "notes": "Graphology and CCTV footage prove Dr. Sterling was physically on-site."
+  },
+  {
+    "id": "evt_1132",
+    "timeStr": "11:32 PM",
+    "timestampMinutes": 92,
+    "title": "Adulterated Scotch Administered",
+    "status": "hidden",
+    "trueDescription": "Dr. Sterling slips 45mg of liquid Midazolam into Timothy's single-malt scotch, urging him to drink.",
+    "evidenceId": "ev_whiskey_sedative",
+    "suspectId": "dr_eleanor_sterling",
+    "notes": "Toby Ray's wiretap audio captured her saying: 'Drink the rest, it will ease the palpitation.'"
+  },
+  {
+    "id": "evt_1138",
+    "timeStr": "11:38 PM",
+    "timestampMinutes": 98,
+    "title": "Victim Collapses Unconscious",
+    "status": "hidden",
+    "trueDescription": "Timothy Vance loses consciousness and slumps onto his living room sofa, completely immobilized.",
+    "evidenceId": "ev_tape_transcript",
+    "suspectId": "dr_eleanor_sterling",
+    "notes": "Acoustic recording captures the distinct thud of a body collapsing."
+  },
+  {
+    "id": "evt_1140",
+    "timeStr": "11:40 PM",
+    "timestampMinutes": 100,
+    "title": "Freight Lift Manually Summoned",
+    "status": "contradicted",
+    "trueDescription": "Superintendent Gregory Vance overrides the freight elevator at the 4th-floor service landing using Master Keycard #2.",
+    "evidenceId": "ev_access_card_terminal",
+    "suspectId": "gregory_vance",
+    "conflictingStatement": "Gregory claims he was in the sub-basement boiler room fixing a steam valve from 11:00 PM until after midnight.",
+    "notes": "Electronic swipe log destroys Gregory's boiler-room alibi."
+  },
+  {
+    "id": "evt_1141",
+    "timeStr": "11:41 PM",
+    "timestampMinutes": 101,
+    "title": "Camera 03 Disabled & Decoy Alarm Armed",
+    "status": "hidden",
+    "trueDescription": "Loading bay Camera 03 is manually unplugged, and a 6-minute delayed test alert is programmed into Apt 4B's Honeywell keypad.",
+    "evidenceId": "ev_panic_alarm_timer",
+    "suspectId": "dr_eleanor_sterling",
+    "notes": "Creates a false timestamp of 11:47 PM to misdirect investigators regarding the vanishing hour."
+  },
+  {
+    "id": "evt_1144",
+    "timeStr": "11:44 PM",
+    "timestampMinutes": 104,
+    "title": "Extraction in Industrial Laundry Hamper",
+    "status": "hidden",
+    "trueDescription": "Unconscious Timothy Vance is placed inside the 400-liter canvas laundry hamper and wheeled into the waiting freight elevator.",
+    "evidenceId": "ev_laundry_cart_dna",
+    "suspectId": "dr_eleanor_sterling",
+    "notes": "Wheel marks on carpet match the cart; forensic DNA confirms Timothy's saliva inside."
+  },
+  {
+    "id": "evt_1145",
+    "timeStr": "11:45 PM",
+    "timestampMinutes": 105,
+    "title": "Magnetic Deadbolt Locked from Outside",
+    "status": "hidden",
+    "trueDescription": "Dr. Sterling and Gregory Vance use a 180-lb neodymium cylinder magnet against the exterior door face to rotate the internal thumbturn, sealing 4B from within.",
+    "evidenceId": "ev_neodymium_magnet",
+    "suspectId": "gregory_vance",
+    "notes": "The ingenious locked-room trick solved: the door was secured from the exterior hallway!"
+  },
+  {
+    "id": "evt_1147",
+    "timeStr": "11:47 PM",
+    "timestampMinutes": 107,
+    "title": "The Decoy Panic Alarm Fires",
+    "status": "uncertain",
+    "trueDescription": "The automated timer on the Honeywell alarm console trips, dispatching security and police to a vacant apartment.",
+    "evidenceId": "ev_panic_alarm_timer",
+    "suspectId": null,
+    "notes": "The 'Vanishing Hour' timestamp was an artificial decoy planted by the abductor."
+  },
+  {
+    "id": "evt_1158",
+    "timeStr": "11:58 PM",
+    "timestampMinutes": 118,
+    "title": "Private Medical Van Departs Alley",
+    "status": "confirmed",
+    "trueDescription": "An unmarked Mercedes Sprinter patient transport van carrying the sedated victim accelerates out of the loading bay into the rain.",
+    "evidenceId": "ev_ambulance_tire_tracks",
+    "suspectId": "dr_eleanor_sterling",
+    "notes": "Tire impressions confirm the vehicle belonged to Meridian Aesthetic Clinic."
+  }
+]
