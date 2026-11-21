@@ -12,6 +12,8 @@ import { EvidenceBoard } from './components/EvidenceBoard';
 import { CaseNotes } from './components/CaseNotes';
 import { DeductionResolution } from './components/DeductionResolution';
 import { CaseResolution } from './components/CaseResolution';
+import { CaseTasksView } from './components/CaseTasksView';
+import { PoliceLineupView } from './components/PoliceLineupView';
 
 import './styles/theme.css';
 import './styles/components.css';
@@ -27,6 +29,8 @@ const GameRouter: React.FC = () => {
         return <CaseBriefing />;
       case 'dashboard':
         return <Dashboard />;
+      case 'tasks':
+        return <CaseTasksView />;
       case 'location_view':
         return <LocationViewer />;
       case 'evidence_viewer':
@@ -42,6 +46,8 @@ const GameRouter: React.FC = () => {
         return <CaseNotes />;
       case 'deduction':
         return <DeductionResolution />;
+      case 'police_lineup':
+        return <PoliceLineupView />;
       case 'resolution':
         return <CaseResolution />;
       default:

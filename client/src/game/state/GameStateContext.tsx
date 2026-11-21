@@ -38,6 +38,9 @@ interface GameContextType {
   setAudioVolume: (vol: number) => void;
   toggleAmbientMusic: () => void;
   saveProgress: () => Promise<void>;
+  completeTask: (taskId: string) => void;
+  completeMiniGame: (game: 'fingerprint' | 'shreddedDocument' | 'uvScan') => void;
+  addPoliceScore: (points: number) => void;
 }
 
 const defaultInitialState: GameState = {
@@ -68,6 +71,10 @@ const defaultInitialState: GameState = {
   playtimeSeconds: 0,
   soundMuted: false,
   soundVolume: 0.5,
+  stars: 1,
+  policeScore: 15000,
+  completedTaskIds: ['task_briefing'],
+  miniGamesCompleted: {},
   finalDeduction: null,
   evaluationResult: null,
   historyLogs: [
@@ -156,9 +163,11 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       let newDiscovered = [...prev.discoveredEvidenceIds];
       const newLogs = [...prev.historyLogs];
+      let scoreIncrease = 12000;
 
       if (targetObj?.revealedEvidenceId && !prev.discoveredEvidenceIds.includes(targetObj.revealedEvidenceId)) {
         newDiscovered.push(targetObj.revealedEvidenceId);
+        scoreIncrease += 28000;
         const ev = caseBundle.evidence.find(e => e.id === targetObj.revealedEvidenceId);
         if (ev) {
           discoveredItem = ev as unknown as EvidenceItem;
@@ -171,11 +180,23 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
       }
 
+      const updatedScore = (prev.policeScore || 15000) + scoreIncrease;
+      const updatedStars = Math.max(prev.stars || 1, Math.min(10, Math.floor(newDiscovered.length / 2) + 1));
+      const updatedTasks = [...(prev.completedTaskIds || [])];
+
+      // Auto-complete scene search task if 3 or more clues found in Apartment 4B
+      if (!updatedTasks.includes('task_inspect_4b') && newDiscovered.length >= 3) {
+        updatedTasks.push('task_inspect_4b');
+      }
+
       return {
         ...prev,
         inspectedObjectIds: inspected,
         discoveredEvidenceIds: newDiscovered,
-        historyLogs: newLogs
+        historyLogs: newLogs,
+        policeScore: updatedScore,
+        stars: updatedStars,
+        completedTaskIds: updatedTasks
       };
     });
 
@@ -354,6 +375,36 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     audio.toggleAmbient();
   }, []);
 
+  const completeTask = useCallback((taskId: string) => {
+    audio.playEvidenceFound();
+    setGameState(prev => {
+      if (prev.completedTaskIds?.includes(taskId)) return prev;
+      return {
+        ...prev,
+        policeScore: (prev.policeScore || 0) + 20000,
+        stars: Math.min(10, (prev.stars || 1) + 1),
+        completedTaskIds: [...(prev.completedTaskIds || []), taskId]
+      };
+    });
+  }, []);
+
+  const completeMiniGame = useCallback((game: 'fingerprint' | 'shreddedDocument' | 'uvScan') => {
+    audio.playStamp();
+    setGameState(prev => ({
+      ...prev,
+      policeScore: (prev.policeScore || 0) + 35000,
+      stars: Math.min(10, (prev.stars || 1) + 1),
+      miniGamesCompleted: { ...(prev.miniGamesCompleted || {}), [game]: true }
+    }));
+  }, []);
+
+  const addPoliceScore = useCallback((points: number) => {
+    setGameState(prev => ({
+      ...prev,
+      policeScore: (prev.policeScore || 0) + points
+    }));
+  }, []);
+
   const saveProgress = useCallback(async () => {
     audio.playTypewriter();
     await ApiService.saveGame(gameState.caseId, gameState, 'ManualSave');
@@ -380,7 +431,10 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         toggleAudioMute,
         setAudioVolume,
         toggleAmbientMusic,
-        saveProgress
+        saveProgress,
+        completeTask,
+        completeMiniGame,
+        addPoliceScore
       }}
     >
       {children}

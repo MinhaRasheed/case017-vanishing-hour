@@ -2,6 +2,7 @@ export type ScreenType =
   | 'main_menu'
   | 'briefing'
   | 'dashboard'
+  | 'tasks'
   | 'location_view'
   | 'evidence_viewer'
   | 'suspect_profiles'
@@ -10,6 +11,7 @@ export type ScreenType =
   | 'evidence_board'
   | 'notes'
   | 'deduction'
+  | 'police_lineup'
   | 'resolution';
 
 export type EvidenceCategory = 'physical' | 'digital' | 'document' | 'forensic' | 'surveillance' | 'testimony';
@@ -169,6 +171,10 @@ export interface GameState {
   playtimeSeconds: number;
   soundMuted: boolean;
   soundVolume: number;
+  stars: number;
+  policeScore: number;
+  completedTaskIds: string[];
+  miniGamesCompleted: { fingerprint?: boolean; shreddedDocument?: boolean; uvScan?: boolean };
   finalDeduction: DeductionSubmission | null;
   evaluationResult: DeductionResult | null;
   historyLogs: { timestamp: string; message: string; type: 'info' | 'clue' | 'contradiction' }[];

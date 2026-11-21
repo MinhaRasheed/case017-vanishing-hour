@@ -262,6 +262,117 @@ export const CharacterPortrait: React.FC<PortraitProps> = ({
             </g>
           </svg>
         );
+
+      // 6. Detective Partner: Inspector Jack Vance
+      case 'detective_partner':
+        return (
+          <svg viewBox="0 0 200 240" width="100%" height="100%">
+            <defs>
+              <linearGradient id="bgJack" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#0f172a" />
+                <stop offset="100%" stopColor="#1e293b" />
+              </linearGradient>
+            </defs>
+            <rect width="200" height="240" fill="url(#bgJack)" rx="8" />
+            {/* Precinct Badge Watermark */}
+            <circle cx="150" cy="50" r="28" fill="#1e293b" opacity="0.4" />
+            <polygon points="150,30 157,44 172,46 161,56 164,71 150,63 136,71 139,56 128,46 143,44" fill="#38bdf8" opacity="0.25" />
+            {/* Dark Navy Trench Coat & Lapels */}
+            <path d="M 25 240 L 40 180 L 70 165 L 100 182 L 130 165 L 160 180 L 175 240 Z" fill="#0f172a" stroke="#1e293b" strokeWidth="2" />
+            {/* White Shirt Collar & Navy Tie */}
+            <path d="M 78 165 L 100 182 L 122 165 L 118 145 L 82 145 Z" fill="#f8fafc" />
+            <polygon points="96,175 104,175 102,230 98,230" fill="#0284c7" />
+            {/* Gold Police Star Badge on Coat Lapel */}
+            <polygon points="62,185 65,191 72,192 67,197 68,204 62,200 56,204 57,197 52,192 59,191" fill="#eab308" stroke="#ca8a04" strokeWidth="0.8" />
+            {/* Head & Face */}
+            <path d="M 72 75 C 72 50, 128 50, 128 75 C 128 115, 120 138, 100 140 C 80 138, 72 115, 72 75 Z" fill="#fde68a" />
+            {/* Sharp Trimmed Hair & Stubble */}
+            <path d="M 68 70 C 68 35, 132 35, 132 70 C 125 45, 100 45, 68 70 Z" fill="#1e1b4b" />
+            {/* Determined Eyes & Eyebrows */}
+            <path d="M 80 82 Q 88 78 95 82" stroke="#0f172a" strokeWidth="2.5" fill="none" />
+            <path d="M 105 82 Q 112 78 120 82" stroke="#0f172a" strokeWidth="2.5" fill="none" />
+            <circle cx="87" cy="90" r="3" fill="#0f172a" />
+            <circle cx="113" cy="90" r="3" fill="#0f172a" />
+            {/* Five o'clock shadow stubble */}
+            <path d="M 82 115 Q 100 135 118 115" stroke="#92400e" strokeWidth="1" strokeDasharray="1 2" fill="none" opacity="0.6" />
+            {/* Confident Smile */}
+            <path d="M 92 120 Q 100 126 108 120" stroke="#78350f" strokeWidth="2" fill="none" />
+          </svg>
+        );
+
+      // 7. Forensic Tech: Dr. Grace Harper
+      case 'forensic_tech':
+        return (
+          <svg viewBox="0 0 200 240" width="100%" height="100%">
+            <defs>
+              <linearGradient id="bgGrace" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#064e3b" />
+                <stop offset="100%" stopColor="#090d16" />
+              </linearGradient>
+            </defs>
+            <rect width="200" height="240" fill="url(#bgGrace)" rx="8" />
+            {/* DNA Helix Background Silhouette */}
+            <path d="M 160 30 Q 140 60 160 90 Q 180 120 160 150 Q 140 180 160 210" stroke="#10b981" strokeWidth="2" fill="none" opacity="0.3" />
+            <path d="M 160 30 Q 180 60 160 90 Q 140 120 160 150 Q 180 180 160 210" stroke="#10b981" strokeWidth="2" fill="none" opacity="0.3" />
+            {/* Pure White Medical Lab Coat */}
+            <path d="M 28 240 L 40 180 L 72 165 L 100 182 L 128 165 L 160 180 L 172 240 Z" fill="#f8fafc" stroke="#cbd5e1" strokeWidth="2" />
+            {/* Teal Scrubs V-Neck Collar */}
+            <polygon points="80,165 100,195 120,165" fill="#0d9488" />
+            {/* ID Lanyard with Forensic Crest */}
+            <path d="M 85 165 L 100 215 L 115 165" stroke="#047857" strokeWidth="3" fill="none" />
+            <rect x="92" y="215" width="16" height="22" rx="2" fill="#e2e8f0" stroke="#0f172a" strokeWidth="1" />
+            {/* Head & High Ponytail */}
+            <circle cx="132" cy="65" r="14" fill="#713f12" />
+            <path d="M 74 75 C 74 52, 126 52, 126 75 C 126 112, 118 135, 100 137 C 82 135, 74 112, 74 75 Z" fill="#fef08a" />
+            <path d="M 72 70 C 72 40, 128 40, 128 70 C 115 48, 85 48, 72 70 Z" fill="#713f12" />
+            {/* Safety Goggles / Clear Glasses with Cyan Sheen */}
+            <rect x="76" y="80" width="22" height="15" rx="3" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" strokeWidth="1.8" />
+            <rect x="102" y="80" width="22" height="15" rx="3" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" strokeWidth="1.8" />
+            <line x1="98" y1="87" x2="102" y2="87" stroke="#38bdf8" strokeWidth="2" />
+            <circle cx="87" cy="87" r="3.5" fill="#115e59" />
+            <circle cx="113" cy="87" r="3.5" fill="#115e59" />
+            {/* Analytical Friendly Smile */}
+            <path d="M 92 120 Q 100 126 108 120" stroke="#92400e" strokeWidth="2" fill="none" />
+          </svg>
+        );
+
+      // 8. Police Chief: Commissioner Samuel Wright
+      case 'police_chief':
+        return (
+          <svg viewBox="0 0 200 240" width="100%" height="100%">
+            <defs>
+              <linearGradient id="bgChief" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#450a0a" />
+                <stop offset="100%" stopColor="#090d16" />
+              </linearGradient>
+            </defs>
+            <rect width="200" height="240" fill="url(#bgChief)" rx="8" />
+            {/* Police Department Gold Seal */}
+            <circle cx="100" cy="50" r="36" fill="none" stroke="#eab308" strokeWidth="1.5" strokeDasharray="3 3" opacity="0.3" />
+            {/* Formal Uniform Tunic with Gold Braided Epaulets */}
+            <path d="M 22 240 L 35 175 L 70 160 L 100 178 L 130 160 L 165 175 L 178 240 Z" fill="#1e293b" stroke="#334155" strokeWidth="2" />
+            {/* Epaulets */}
+            <rect x="30" y="172" width="28" height="10" rx="3" fill="#eab308" stroke="#ca8a04" strokeWidth="1" />
+            <rect x="142" y="172" width="28" height="10" rx="3" fill="#eab308" stroke="#ca8a04" strokeWidth="1" />
+            {/* Medal Ribbon Bar on Chest */}
+            <rect x="50" y="195" width="25" height="7" fill="#ef4444" />
+            <rect x="58" y="195" width="8" height="7" fill="#3b82f6" />
+            <rect x="50" y="204" width="25" height="7" fill="#10b981" />
+            {/* White Collar & Tie */}
+            <path d="M 80 160 L 100 180 L 120 160 L 115 145 L 85 145 Z" fill="#f8fafc" />
+            <polygon points="96,172 104,172 102,230 98,230" fill="#0f172a" />
+            {/* Distinguished Grey Hair & Mustache */}
+            <path d="M 72 75 C 72 48, 128 48, 128 75 C 128 115, 120 138, 100 140 C 80 138, 72 115, 72 75 Z" fill="#fde68a" />
+            <path d="M 68 70 C 68 35, 132 35, 132 70 C 125 45, 100 45, 68 70 Z" fill="#94a3b8" />
+            {/* Serious Eyes & Bushy Brows */}
+            <path d="M 78 82 Q 88 76 96 82" stroke="#64748b" strokeWidth="3" fill="none" />
+            <path d="M 104 82 Q 112 76 122 82" stroke="#64748b" strokeWidth="3" fill="none" />
+            <circle cx="87" cy="90" r="3.2" fill="#0f172a" />
+            <circle cx="113" cy="90" r="3.2" fill="#0f172a" />
+            {/* Full Grey Police Mustache */}
+            <path d="M 82 115 Q 100 108 118 115 Q 100 125 82 115 Z" fill="#94a3b8" />
+          </svg>
+        );
     }
   };
 

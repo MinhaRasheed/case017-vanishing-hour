@@ -3,6 +3,7 @@ import { useGame } from '../game/state/GameStateContext';
 import { InspectableObject, LocationScene, EvidenceItem } from '../game/state/types';
 import { SceneIllustration } from './graphics/SceneIllustrations';
 import { EvidenceGraphic } from './graphics/EvidenceIllustrations';
+import { CharacterPortrait } from './graphics/CharacterPortraits';
 import { audio } from '../services/audioService';
 import {
   MapPin,
@@ -13,13 +14,19 @@ import {
   ArrowRight,
   Shield,
   X,
-  Sparkles
+  Sparkles,
+  Star,
+  Award,
+  Zap,
+  HelpCircle
 } from 'lucide-react';
 
 export const LocationViewer: React.FC = () => {
   const { gameState, caseBundle, setLocation, inspectObject, setScreen } = useGame();
   const [selectedInspectable, setSelectedInspectable] = useState<InspectableObject | null>(null);
   const [isUVMode, setIsUVMode] = useState<boolean>(false);
+  const [hintHighlightId, setHintHighlightId] = useState<string | null>(null);
+  const [combo, setCombo] = useState<number>(1);
   const [inspectionResult, setInspectionResult] = useState<{
     evidenceDiscovered: EvidenceItem | null;
     inspectionText: string;
@@ -29,9 +36,38 @@ export const LocationViewer: React.FC = () => {
     caseBundle.locations.find(l => l.id === gameState.currentLocationId) || caseBundle.locations[0];
 
   const handleInspect = (obj: InspectableObject) => {
+    setCombo(prev => Math.min(5, prev + 1));
     const res = inspectObject(obj.id);
     setSelectedInspectable(obj);
     setInspectionResult(res);
+  };
+
+  const handleHint = () => {
+    const uninspected = currentLocation.inspectables.find(
+      o => !gameState.inspectedObjectIds.includes(o.id)
+    );
+    if (uninspected) {
+      audio.playStamp();
+      setHintHighlightId(uninspected.id);
+      setTimeout(() => setHintHighlightId(null), 4000);
+    }
+  };
+
+  const getPartnerTip = (locId: string) => {
+    switch (locId) {
+      case 'apartment_4b':
+        return "Look closely at that scotch glass on the coffee table and the digital alarm keypad. The alarm screamed at 11:47 PM, but was anyone actually alive in the room?";
+      case 'hallway_4th':
+        return "Check the carpet runner. Those damp wheel treads lead straight to the freight elevator landing—not the front lobby.";
+      case 'security_room':
+        return "Look for tampering around the master power toggle and Gregory Vance's maintenance locker.";
+      case 'rooftop':
+        return "Notice those crushed Sobranie cigarettes with red lipstick on the ventilation parapet—someone was running surveillance.";
+      case 'parking_garage':
+        return "Check the loading bay for ambulance tyre treads and search the trash compactor for pharmaceutical glass!";
+      default:
+        return "Search every corner of this scene, Detective. Every object tells a story.";
+    }
   };
 
   const handleCloseModal = () => {
@@ -196,6 +232,160 @@ export const LocationViewer: React.FC = () => {
           <Sparkles size={14} />
           <span>{isUVMode ? 'UV BLACKLIGHT ACTIVE [ON]' : 'ENABLE UV FORENSIC LENS'}</span>
         </button>
+
+        {/* Pulsing Hint Beacon if triggered */}
+        {hintHighlightId && (
+          <div style={{
+            position: 'absolute',
+            bottom: 20,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: '#eab308',
+            color: '#000',
+            fontWeight: '800',
+            padding: '8px 18px',
+            borderRadius: '20px',
+            boxShadow: '0 0 24px #eab308',
+            zIndex: 30,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.85rem',
+            animation: 'objectionZoom 0.3s ease-out'
+          }}>
+            <Search size={16} />
+            <span>HINT: EXAMINE "{currentLocation.inspectables.find(o => o.id === hintHighlightId)?.name.toUpperCase()}"</span>
+          </div>
+        )}
+      </div>
+
+      {/* Criminal Case Style: Target Item Search Ribbon Dock */}
+      <div style={{
+        background: '#0a0d14',
+        border: '2px solid #334155',
+        borderRadius: '10px',
+        padding: '14px 18px',
+        marginBottom: '20px',
+        display: 'flex',
+        flexWrap: 'wrap',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: '14px',
+        boxShadow: '0 6px 20px rgba(0,0,0,0.6)'
+      }}>
+        {/* Left: Target Clues Ribbon */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', flex: 1 }}>
+          <span style={{
+            fontSize: '0.75rem',
+            fontFamily: 'var(--font-mono)',
+            fontWeight: '700',
+            color: '#38bdf8',
+            marginRight: '6px'
+          }}>
+            ITEMS TO FIND ({currentLocation.inspectables.filter(o => gameState.inspectedObjectIds.includes(o.id)).length}/{currentLocation.inspectables.length}):
+          </span>
+
+          {currentLocation.inspectables.map(obj => {
+            const isInspected = gameState.inspectedObjectIds.includes(obj.id);
+            const isHinted = hintHighlightId === obj.id;
+            return (
+              <div
+                key={obj.id}
+                onClick={() => handleInspect(obj)}
+                style={{
+                  background: isHinted
+                    ? '#eab308'
+                    : isInspected
+                    ? 'rgba(16, 185, 129, 0.15)'
+                    : '#1e293b',
+                  color: isHinted ? '#000' : isInspected ? '#10b981' : '#cbd5e1',
+                  border: isHinted
+                    ? '2px solid #fff'
+                    : isInspected
+                    ? '1px solid #10b981'
+                    : '1px solid #475569',
+                  borderRadius: '6px',
+                  padding: '6px 12px',
+                  fontSize: '0.8rem',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  transition: 'all 0.15s'
+                }}
+              >
+                {isInspected ? <CheckCircle size={14} /> : <Eye size={14} />}
+                <span>{obj.name}</span>
+                {isInspected && <span style={{ fontSize: '0.65rem', color: '#6ee7b7' }}>+10K</span>}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Right: Hint Button and Combo Pill */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          {/* Combo Multiplier */}
+          <div style={{
+            background: 'linear-gradient(135deg, #ea580c, #c2410c)',
+            color: '#fff',
+            padding: '6px 12px',
+            borderRadius: '6px',
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.75rem',
+            fontWeight: '800',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            boxShadow: '0 0 12px rgba(234, 88, 12, 0.4)'
+          }}>
+            <Zap size={14} />
+            <span>COMBO x{combo}</span>
+          </div>
+
+          {/* Criminal Case Magnifying Glass Hint Button */}
+          <button
+            onClick={handleHint}
+            className="btn-primary"
+            style={{
+              padding: '6px 14px',
+              fontSize: '0.8rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              background: '#eab308',
+              color: '#000',
+              fontWeight: '800',
+              border: 'none'
+            }}
+          >
+            <Search size={15} />
+            <span>MAGNIFYING HINT</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Partner Commentary Speech Bubble (Criminal Case Style) */}
+      <div style={{
+        background: '#121622',
+        border: '1px solid #1e293b',
+        borderRadius: '8px',
+        padding: '14px 18px',
+        marginBottom: '20px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '16px'
+      }}>
+        <CharacterPortrait id="detective_partner" size={65} showBadge={false} />
+        <div style={{ flex: 1 }}>
+          <div style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--accent-cyan)', marginBottom: '2px' }}>
+            PARTNER // INSPECTOR JACK VANCE:
+          </div>
+          <p style={{ color: '#e2e8f0', fontSize: '0.9rem', margin: 0, fontStyle: 'italic', lineHeight: 1.4 }}>
+            "{getPartnerTip(currentLocation.id)}"
+          </p>
+        </div>
       </div>
 
       {/* Accessible Inspectables Grid List */}

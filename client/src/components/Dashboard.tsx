@@ -10,7 +10,11 @@ import {
   ArrowRight,
   ShieldCheck,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  Star,
+  Award,
+  ListTodo,
+  Scale
 } from 'lucide-react';
 import { TimelineEngine } from '../game/engine/TimelineEngine';
 
@@ -119,6 +123,56 @@ export const Dashboard: React.FC = () => {
               <div style={{ width: `${(gameState.visitedLocationIds.length / caseBundle.locations.length) * 100}%`, height: '100%', background: 'var(--accent-emerald)' }} />
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Partner Inspector Jack Vance Guidance Card (Criminal Case) */}
+      <div style={{
+        background: 'linear-gradient(135deg, #131b2e 0%, #0b0f19 100%)',
+        border: '1px solid #1e293b',
+        borderRadius: '12px',
+        padding: '16px 20px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: '20px',
+        marginBottom: '28px',
+        boxShadow: '0 6px 20px rgba(0,0,0,0.5)'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <CharacterPortrait id="detective_partner" size={70} showBadge={false} />
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+              <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--accent-cyan)', fontWeight: '700' }}>
+                PARTNER // INSPECTOR JACK VANCE
+              </span>
+              <span className="stamp stamp-amber" style={{ fontSize: '0.65rem' }}>
+                ⭐ {gameState.stars || 1} STARS EARNED
+              </span>
+            </div>
+            <p style={{ color: '#e2e8f0', fontSize: '0.95rem', margin: 0, fontStyle: 'italic', maxWidth: '650px', lineHeight: 1.4 }}>
+              "We have {foundEvidence} of {totalEvidence} clues logged. You've got police stars available—head to the Case Tasks board to dust the deadbolt for prints and piece together that burned codicil before we bring in the suspects!"
+            </p>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <button
+            className="btn-primary"
+            style={{ fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px' }}
+            onClick={() => setScreen('tasks')}
+          >
+            <ListTodo size={16} />
+            <span>Open Case Tasks</span>
+          </button>
+          <button
+            className="btn-danger"
+            style={{ fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px' }}
+            onClick={() => setScreen('police_lineup')}
+          >
+            <Scale size={16} />
+            <span>Police Lineup</span>
+          </button>
         </div>
       </div>
 

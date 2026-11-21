@@ -15,7 +15,10 @@ import {
   VolumeX,
   Music,
   Save,
-  RotateCcw
+  RotateCcw,
+  Star,
+  Award,
+  ListTodo
 } from 'lucide-react';
 
 export const Header: React.FC = () => {
@@ -45,12 +48,13 @@ export const Header: React.FC = () => {
 
   const navItems: { screen: ScreenType; label: string; icon: React.ReactNode; badge?: number }[] = [
     { screen: 'dashboard', label: 'Command', icon: <LayoutDashboard size={16} /> },
+    { screen: 'tasks', label: 'Tasks', icon: <ListTodo size={16} />, badge: Math.max(0, 7 - (gameState.completedTaskIds?.length || 1)) },
     { screen: 'location_view', label: 'Scenes', icon: <MapPin size={16} />, badge: gameState.visitedLocationIds.length },
     { screen: 'suspect_profiles', label: 'Suspects', icon: <Users size={16} />, badge: caseBundle.suspects.length },
     { screen: 'evidence_viewer', label: 'Evidence', icon: <Search size={16} />, badge: gameState.discoveredEvidenceIds.length },
     { screen: 'timeline', label: 'Timeline', icon: <Clock size={16} /> },
     { screen: 'evidence_board', label: 'Board', icon: <Share2 size={16} /> },
-    { screen: 'notes', label: 'Notes', icon: <BookOpen size={16} />, badge: gameState.notes.length },
+    { screen: 'police_lineup', label: 'Lineup', icon: <Users size={16} /> },
     { screen: 'deduction', label: 'Indictment', icon: <CheckCircle size={16} /> },
   ];
 
@@ -78,6 +82,48 @@ export const Header: React.FC = () => {
             </div>
           </div>
         </button>
+
+        {/* Criminal Case Style: Police Stars & Score Pills */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: '12px' }}>
+          <div
+            onClick={() => setScreen('tasks')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              background: '#090d16',
+              border: '1px solid #eab308',
+              padding: '4px 10px',
+              borderRadius: '6px',
+              color: '#fef08a',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.8rem',
+              fontWeight: '700',
+              cursor: 'pointer'
+            }}
+            title="Earn Police Stars by completing scene investigations and lab tasks"
+          >
+            <Star size={14} fill="#eab308" color="#fef08a" />
+            <span>{gameState.stars || 1} / 10</span>
+          </div>
+
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            background: '#090d16',
+            border: '1px solid #38bdf8',
+            padding: '4px 10px',
+            borderRadius: '6px',
+            color: '#38bdf8',
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.8rem',
+            fontWeight: '700'
+          }}>
+            <Award size={14} />
+            <span>{(gameState.policeScore || 15000).toLocaleString()} PTS</span>
+          </div>
+        </div>
       </div>
 
       <nav className="header-nav">
