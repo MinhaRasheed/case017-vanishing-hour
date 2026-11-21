@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { useGame } from '../game/state/GameStateContext';
 import { SuspectProfile, EvidenceItem } from '../game/state/types';
+import { CharacterPortrait } from './graphics/CharacterPortraits';
+import { audio } from '../services/audioService';
 import {
   AlertOctagon,
   Search,
   CheckCircle,
   X,
   ShieldAlert,
-  ArrowRight
+  ArrowRight,
+  Flame
 } from 'lucide-react';
 
 interface ContradictionModalProps {
@@ -18,6 +21,7 @@ interface ContradictionModalProps {
 export const ContradictionModal: React.FC<ContradictionModalProps> = ({ suspect, onClose }) => {
   const { gameState, caseBundle, presentEvidence } = useGame();
   const [selectedEvidenceId, setSelectedEvidenceId] = useState<string>('');
+  const [isShaking, setIsShaking] = useState<boolean>(false);
   const [outcome, setOutcome] = useState<{
     tested: boolean;
     isContradiction: boolean;
@@ -32,6 +36,15 @@ export const ContradictionModal: React.FC<ContradictionModalProps> = ({ suspect,
   const handleChallenge = () => {
     if (!selectedEvidenceId) return;
     const res = presentEvidence(suspect.id, selectedEvidenceId);
+    if (res.isContradiction) {
+      audio.playContradiction();
+      audio.playStamp();
+      setIsShaking(true);
+      setTimeout(() => setIsShaking(false), 550);
+    } else {
+      audio.playDullClick();
+    }
+
     setOutcome({
       tested: true,
       isContradiction: res.isContradiction,
@@ -42,7 +55,15 @@ export const ContradictionModal: React.FC<ContradictionModalProps> = ({ suspect,
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '750px' }}>
+      <div
+        className={`modal-content ${isShaking ? 'screen-shake' : ''}`}
+        onClick={e => e.stopPropagation()}
+        style={{
+          maxWidth: '750px',
+          boxShadow: outcome?.isContradiction ? '0 0 40px rgba(230, 57, 70, 0.4)' : undefined,
+          border: outcome?.isContradiction ? '2px solid var(--accent-red)' : undefined
+        }}
+      >
         {/* Modal Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
           <div>
@@ -58,20 +79,76 @@ export const ContradictionModal: React.FC<ContradictionModalProps> = ({ suspect,
           </button>
         </div>
 
-        {/* Suspect's Sworn Claim */}
+        {/* Dramatic Objection Banner when contradiction is slammed */}
+        {outcome?.isContradiction && (
+          <div
+            className="objection-banner"
+            style={{
+              background: 'linear-gradient(90deg, #b91c1c 0%, #dc2626 50%, #b91c1c 100%)',
+              color: '#fff',
+              padding: '12px 20px',
+              borderRadius: '8px',
+              marginBottom: '18px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '12px',
+              boxShadow: '0 8px 24px rgba(220, 38, 38, 0.5)',
+              border: '2px solid #fecaca'
+            }}
+          >
+            <Flame size={24} color="#fef08a" />
+            <span style={{
+              fontFamily: 'var(--font-mono)',
+              fontWeight: '900',
+              letterSpacing: '0.15em',
+              fontSize: '1.15rem',
+              textShadow: '0 2px 4px rgba(0,0,0,0.6)'
+            }}>
+              HOLD IT! CONTRADICTION EXPOSED!
+            </span>
+            <Flame size={24} color="#fef08a" />
+          </div>
+        )}
+
+        {/* Suspect's Sworn Claim with Visual Portrait */}
         <div style={{
           background: '#0a0d14',
-          borderLeft: '4px solid var(--accent-red)',
+          borderLeft: outcome?.isContradiction ? '4px solid #ef4444' : '4px solid var(--accent-red)',
           padding: '16px 20px',
           borderRadius: '6px',
-          marginBottom: '24px'
+          marginBottom: '24px',
+          display: 'flex',
+          gap: '18px',
+          alignItems: 'center'
         }}>
-          <div style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--accent-amber)', marginBottom: '4px' }}>
-            SUSPECT'S CURRENT SWORN ALIBI STATEMENT:
+          <div style={{ position: 'relative' }}>
+            <CharacterPortrait id={suspect.id} size={75} showBadge={false} />
+            {outcome?.isContradiction && (
+              <span style={{
+                position: 'absolute',
+                bottom: -6,
+                right: -6,
+                background: '#dc2626',
+                color: '#fff',
+                fontSize: '0.65rem',
+                fontWeight: '800',
+                padding: '2px 6px',
+                borderRadius: '4px',
+                border: '1px solid #fff'
+              }}>
+                RATTLED
+              </span>
+            )}
           </div>
-          <p style={{ fontStyle: 'italic', color: '#e2e8f0', fontSize: '0.95rem', lineHeight: 1.6 }}>
-            "{suspect.initialStatement}"
-          </p>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--accent-amber)', marginBottom: '4px' }}>
+              SUSPECT'S CURRENT SWORN ALIBI STATEMENT:
+            </div>
+            <p style={{ fontStyle: 'italic', color: '#e2e8f0', fontSize: '0.95rem', lineHeight: 1.6 }}>
+              "{suspect.initialStatement}"
+            </p>
+          </div>
         </div>
 
         {/* Outcome Display if already challenged */}
@@ -86,7 +163,7 @@ export const ContradictionModal: React.FC<ContradictionModalProps> = ({ suspect,
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
               <span className={`stamp ${outcome.isContradiction ? 'stamp-red' : 'stamp-amber'}`}>
-                {outcome.isContradiction ? 'CONTRADICTION EXPOSED!' : 'CHALLENGE DEFLECTED'}
+                {outcome.isContradiction ? 'SWORN ALIBI DISPROVEN' : 'CHALLENGE DEFLECTED'}
               </span>
             </div>
 
@@ -175,7 +252,7 @@ export const ContradictionModal: React.FC<ContradictionModalProps> = ({ suspect,
         </div>
 
         {/* Modal Buttons */}
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <button className="btn-secondary" onClick={onClose}>
             {outcome?.isContradiction ? 'Conclude Inquiry' : 'Cancel'}
           </button>

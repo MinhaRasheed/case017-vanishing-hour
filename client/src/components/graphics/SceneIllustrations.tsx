@@ -6,13 +6,15 @@ interface SceneProps {
   inspectables: InspectableObject[];
   inspectedIds: string[];
   onInspect: (obj: InspectableObject) => void;
+  isUVMode?: boolean;
 }
 
 export const SceneIllustration: React.FC<SceneProps> = ({
   locationId,
   inspectables,
   inspectedIds,
-  onInspect
+  onInspect,
+  isUVMode = false
 }) => {
   const getInspectable = (id: string) => inspectables.find(o => o.id === id);
 
@@ -183,6 +185,29 @@ export const SceneIllustration: React.FC<SceneProps> = ({
             <circle cx="910" cy="355" r="2.5" fill="#94a3b8" />
             <text x="885" y="110" fill="#94a3b8" fontSize="10" fontFamily="monospace" textAnchor="middle">CLOSET SERVICE HATCH</text>
           </g>
+
+          {/* UV Luminol & Trace Analysis Overlay */}
+          {isUVMode && (
+            <g className="uv-trail" pointerEvents="none">
+              <rect width="1000" height="500" fill="#2e1065" opacity="0.4" />
+              {/* Glowing Midazolam residue on glass */}
+              <circle cx="480" cy="400" r="22" fill="#c084fc" opacity="0.85" filter="drop-shadow(0 0 10px #c084fc)" />
+              <text x="480" y="370" fill="#f0abfc" fontSize="11" fontFamily="monospace" textAnchor="middle" fontWeight="bold">
+                [UV FLUORESCENCE] SEDATIVE CHEMICAL RESIDUE
+              </text>
+              {/* Heavy hamper wheel tracks on parquet floor */}
+              <path d="M 520 440 L 160 380" stroke="#f472b6" strokeWidth="6" strokeDasharray="8 6" fill="none" opacity="0.9" />
+              <path d="M 535 455 L 175 395" stroke="#f472b6" strokeWidth="6" strokeDasharray="8 6" fill="none" opacity="0.9" />
+              <text x="350" y="445" fill="#f472b6" fontSize="11" fontFamily="monospace" fontWeight="bold">
+                [UV] HEAVY ROLLING CART LOAD COMPRESSION (190 LBS)
+              </text>
+              {/* Magnetic flux arc scrape on deadbolt cylinder */}
+              <path d="M 120 270 Q 140 280 120 290" stroke="#38bdf8" strokeWidth="4" fill="none" opacity="0.95" />
+              <text x="80" y="250" fill="#7dd3fc" fontSize="11" fontFamily="monospace" fontWeight="bold">
+                [UV] EXTERNAL MAGNETIC FLUX ABRASION
+              </text>
+            </g>
+          )}
         </svg>
       );
 
@@ -279,6 +304,24 @@ export const SceneIllustration: React.FC<SceneProps> = ({
             <line x1="282" y1="220" x2="285" y2="230" stroke="#ef4444" strokeWidth="2" />
             <text x="260" y="360" fill="#ef4444" fontSize="10" fontFamily="monospace" textAnchor="middle">SHEARED SENSOR</text>
           </g>
+
+          {/* UV Luminol & Trace Analysis Overlay */}
+          {isUVMode && (
+            <g className="uv-trail" pointerEvents="none">
+              <rect width="1000" height="500" fill="#2e1065" opacity="0.4" />
+              {/* Glowing Cart Wheel Path from 4B to Service Elevator */}
+              <path d="M 850 430 L 460 300" stroke="#f472b6" strokeWidth="8" strokeDasharray="10 8" fill="none" opacity="0.9" />
+              <path d="M 865 445 L 475 315" stroke="#f472b6" strokeWidth="8" strokeDasharray="10 8" fill="none" opacity="0.9" />
+              <text x="640" y="390" fill="#f472b6" fontSize="11" fontFamily="monospace" fontWeight="bold">
+                [UV TRACKS] ROLLING LAUNDRY CART EN ROUTE TO FREIGHT LIFT
+              </text>
+              {/* Dropped Cotton Swab fiber */}
+              <circle cx="820" cy="450" r="14" fill="#a855f7" opacity="0.8" />
+              <text x="820" y="480" fill="#d8b4fe" fontSize="10" fontFamily="monospace" textAnchor="middle">
+                [UV] STERILE MEDICAL SWAB FIBER
+              </text>
+            </g>
+          )}
         </svg>
       );
 
@@ -398,6 +441,18 @@ export const SceneIllustration: React.FC<SceneProps> = ({
               WET UMBRELLA ('C.B.')
             </text>
           </g>
+
+          {/* UV Luminol & Trace Analysis Overlay */}
+          {isUVMode && (
+            <g className="uv-trail" pointerEvents="none">
+              <rect width="1000" height="500" fill="#2e1065" opacity="0.4" />
+              {/* Rain trail bypassing lobby receptionist desk towards alley door */}
+              <path d="M 120 450 Q 300 480 600 430" stroke="#38bdf8" strokeWidth="6" strokeDasharray="8 6" fill="none" opacity="0.8" />
+              <text x="400" y="470" fill="#7dd3fc" fontSize="11" fontFamily="monospace" fontWeight="bold">
+                [UV] WET RAINWATER FOOTFALL TRAIL BYPASSING SECURITY DESK
+              </text>
+            </g>
+          )}
         </svg>
       );
 
@@ -503,6 +558,18 @@ export const SceneIllustration: React.FC<SceneProps> = ({
               180-LB NEODYMIUM MAGNET
             </text>
           </g>
+
+          {/* UV Luminol & Trace Analysis Overlay */}
+          {isUVMode && (
+            <g className="uv-trail" pointerEvents="none">
+              <rect width="1000" height="500" fill="#2e1065" opacity="0.4" />
+              {/* Fresh Latex glove powder smudge around Master CCTV Breaker */}
+              <circle cx="170" cy="190" r="28" fill="#facc15" opacity="0.8" filter="drop-shadow(0 0 8px #facc15)" />
+              <text x="170" y="150" fill="#fef08a" fontSize="11" fontFamily="monospace" textAnchor="middle" fontWeight="bold">
+                [UV] LATEX RESIDUE & THUMB IMPRESSION ON CCTV POWER TOGGLE
+              </text>
+            </g>
+          )}
         </svg>
       );
 
@@ -603,6 +670,18 @@ export const SceneIllustration: React.FC<SceneProps> = ({
               RUSTED FIRE LADDER
             </text>
           </g>
+
+          {/* UV Luminol & Trace Analysis Overlay */}
+          {isUVMode && (
+            <g className="uv-trail" pointerEvents="none">
+              <rect width="1000" height="500" fill="#2e1065" opacity="0.4" />
+              {/* Raindrop spatter and footprints by camera observation parapet */}
+              <ellipse cx="440" cy="420" rx="40" ry="15" fill="#a855f7" opacity="0.75" />
+              <text x="440" y="450" fill="#d8b4fe" fontSize="11" fontFamily="monospace" textAnchor="middle" fontWeight="bold">
+                [UV] RECENT FOOTWEAR IMPRESSION (TELEPHOTO LENS PERCH)
+              </text>
+            </g>
+          )}
         </svg>
       );
 
@@ -712,6 +791,18 @@ export const SceneIllustration: React.FC<SceneProps> = ({
               LOADING BAY (AMBULANCE TRACKS)
             </text>
           </g>
+
+          {/* UV Luminol & Trace Analysis Overlay */}
+          {isUVMode && (
+            <g className="uv-trail" pointerEvents="none">
+              <rect width="1000" height="500" fill="#2e1065" opacity="0.4" />
+              {/* Leaked Blue Medical Ethylene Glycol Coolant Puddle */}
+              <ellipse cx="610" cy="410" rx="36" ry="14" fill="#38bdf8" opacity="0.9" filter="drop-shadow(0 0 10px #38bdf8)" />
+              <text x="610" y="445" fill="#7dd3fc" fontSize="11" fontFamily="monospace" textAnchor="middle" fontWeight="bold">
+                [UV FLUORESCENCE] BLUE MEDICAL GLYCOL COOLANT (SPRINTER TRANSPORT)
+              </text>
+            </g>
+          )}
         </svg>
       );
   }

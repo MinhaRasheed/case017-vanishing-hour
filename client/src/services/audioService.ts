@@ -243,6 +243,153 @@ class AudioService {
     osc.start();
     osc.stop(this.ctx.currentTime + 0.09);
   }
+
+  public playDullClick() {
+    this.initContext();
+    if (!this.ctx || !this.masterGain || this.isMuted) return;
+
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(220, this.ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(110, this.ctx.currentTime + 0.08);
+
+    gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.08);
+
+    osc.connect(gain);
+    gain.connect(this.masterGain);
+    osc.start();
+    osc.stop(this.ctx.currentTime + 0.09);
+  }
+
+  public playDropperSound() {
+    this.initContext();
+    if (!this.ctx || !this.masterGain || this.isMuted) return;
+
+    // Resonant water droplet plink
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1400, this.ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(700, this.ctx.currentTime + 0.12);
+
+    gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.12);
+
+    osc.connect(gain);
+    gain.connect(this.masterGain);
+    osc.start();
+    osc.stop(this.ctx.currentTime + 0.13);
+  }
+
+  public playWiretapAudio(onDone?: () => void) {
+    this.initContext();
+    if (!this.ctx || !this.masterGain || this.isMuted) {
+      if (onDone) setTimeout(onDone, 6000);
+      return;
+    }
+
+    const now = this.ctx.currentTime;
+
+    // 1. Tape deck engagement click
+    const clickOsc = this.ctx.createOscillator();
+    const clickGain = this.ctx.createGain();
+    clickOsc.type = 'square';
+    clickOsc.frequency.setValueAtTime(800, now);
+    clickOsc.frequency.exponentialRampToValueAtTime(80, now + 0.06);
+    clickGain.gain.setValueAtTime(0.15, now);
+    clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+    clickOsc.connect(clickGain);
+    clickGain.connect(this.masterGain);
+    clickOsc.start(now);
+    clickOsc.stop(now + 0.07);
+
+    // 2. Continuous tape hiss (6 seconds)
+    const bufferSize = this.ctx.sampleRate * 6;
+    const noiseBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+    const output = noiseBuffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      output[i] = (Math.random() * 2 - 1) * 0.15;
+    }
+    const hissSource = this.ctx.createBufferSource();
+    hissSource.buffer = noiseBuffer;
+
+    const hissFilter = this.ctx.createBiquadFilter();
+    hissFilter.type = 'bandpass';
+    hissFilter.frequency.setValueAtTime(1800, now);
+
+    const hissGain = this.ctx.createGain();
+    hissGain.gain.setValueAtTime(0.06, now);
+    hissGain.gain.linearRampToValueAtTime(0.06, now + 5.5);
+    hissGain.gain.linearRampToValueAtTime(0.001, now + 6.0);
+
+    hissSource.connect(hissFilter);
+    hissFilter.connect(hissGain);
+    hissGain.connect(this.masterGain);
+    hissSource.start(now);
+    hissSource.stop(now + 6.1);
+
+    // 3. Clink of glass at 1.2s
+    const glassOsc = this.ctx.createOscillator();
+    const glassGain = this.ctx.createGain();
+    glassOsc.type = 'sine';
+    glassOsc.frequency.setValueAtTime(2400, now + 1.2);
+    glassGain.gain.setValueAtTime(0.08, now + 1.2);
+    glassGain.gain.exponentialRampToValueAtTime(0.001, now + 1.5);
+    glassOsc.connect(glassGain);
+    glassGain.connect(this.masterGain);
+    glassOsc.start(now + 1.2);
+    glassOsc.stop(now + 1.6);
+
+    // 4. Heavy body collapse thud at 2.6s
+    const thudOsc = this.ctx.createOscillator();
+    const thudGain = this.ctx.createGain();
+    thudOsc.type = 'triangle';
+    thudOsc.frequency.setValueAtTime(95, now + 2.6);
+    thudOsc.frequency.exponentialRampToValueAtTime(25, now + 3.2);
+    thudGain.gain.setValueAtTime(0.25, now + 2.6);
+    thudGain.gain.exponentialRampToValueAtTime(0.001, now + 3.3);
+    thudOsc.connect(thudGain);
+    thudGain.connect(this.masterGain);
+    thudOsc.start(now + 2.6);
+    thudOsc.stop(now + 3.4);
+
+    // 5. Rolling wheels rumbling across carpet at 4.0s
+    const rollOsc = this.ctx.createOscillator();
+    const rollGain = this.ctx.createGain();
+    rollOsc.type = 'sawtooth';
+    rollOsc.frequency.setValueAtTime(65, now + 4.0);
+    rollOsc.frequency.linearRampToValueAtTime(80, now + 4.8);
+    const rollFilter = this.ctx.createBiquadFilter();
+    rollFilter.type = 'lowpass';
+    rollFilter.frequency.setValueAtTime(120, now + 4.0);
+    rollGain.gain.setValueAtTime(0.12, now + 4.0);
+    rollGain.gain.exponentialRampToValueAtTime(0.001, now + 5.0);
+    rollOsc.connect(rollFilter);
+    rollFilter.connect(rollGain);
+    rollGain.connect(this.masterGain);
+    rollOsc.start(now + 4.0);
+    rollOsc.stop(now + 5.1);
+
+    // 6. Decoy Panic alarm sharp electronic pulses at 5.2s
+    [5.2, 5.4, 5.6].forEach(timeOffset => {
+      const beepOsc = this.ctx!.createOscillator();
+      const beepGain = this.ctx!.createGain();
+      beepOsc.type = 'sine';
+      beepOsc.frequency.setValueAtTime(1046.5, now + timeOffset);
+      beepGain.gain.setValueAtTime(0.14, now + timeOffset);
+      beepGain.gain.exponentialRampToValueAtTime(0.001, now + timeOffset + 0.1);
+      beepOsc.connect(beepGain);
+      beepGain.connect(this.masterGain!);
+      beepOsc.start(now + timeOffset);
+      beepOsc.stop(now + timeOffset + 0.12);
+    });
+
+    if (onDone) {
+      setTimeout(onDone, 6200);
+    }
+  }
 }
 
 export const audio = new AudioService();

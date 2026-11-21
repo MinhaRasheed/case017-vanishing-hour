@@ -3,6 +3,7 @@ import { useGame } from '../game/state/GameStateContext';
 import { InspectableObject, LocationScene, EvidenceItem } from '../game/state/types';
 import { SceneIllustration } from './graphics/SceneIllustrations';
 import { EvidenceGraphic } from './graphics/EvidenceIllustrations';
+import { audio } from '../services/audioService';
 import {
   MapPin,
   Search,
@@ -11,12 +12,14 @@ import {
   AlertTriangle,
   ArrowRight,
   Shield,
-  X
+  X,
+  Sparkles
 } from 'lucide-react';
 
 export const LocationViewer: React.FC = () => {
   const { gameState, caseBundle, setLocation, inspectObject, setScreen } = useGame();
   const [selectedInspectable, setSelectedInspectable] = useState<InspectableObject | null>(null);
+  const [isUVMode, setIsUVMode] = useState<boolean>(false);
   const [inspectionResult, setInspectionResult] = useState<{
     evidenceDiscovered: EvidenceItem | null;
     inspectionText: string;
@@ -140,6 +143,7 @@ export const LocationViewer: React.FC = () => {
           inspectables={currentLocation.inspectables}
           inspectedIds={gameState.inspectedObjectIds}
           onInspect={handleInspect}
+          isUVMode={isUVMode}
         />
 
         {/* Scene HUD watermark */}
@@ -149,16 +153,49 @@ export const LocationViewer: React.FC = () => {
           left: 18,
           fontFamily: 'var(--font-mono)',
           fontSize: '0.75rem',
-          color: 'var(--accent-amber)',
+          color: isUVMode ? '#c084fc' : 'var(--accent-amber)',
           letterSpacing: '0.1em',
           background: 'rgba(10, 12, 16, 0.85)',
           padding: '4px 10px',
           borderRadius: '4px',
-          border: '1px solid var(--border-subtle)',
+          border: isUVMode ? '1px solid #9333ea' : '1px solid var(--border-subtle)',
           pointerEvents: 'none'
         }}>
-          CRIME SCENE: {currentLocation.name.toUpperCase()} // CLICK OBJECTS TO EXAMINE FORENSICS
+          {isUVMode
+            ? `UV FORENSIC SPECTRUM: ${currentLocation.name.toUpperCase()} // HIDDEN FLUORESCENCE ACTIVE`
+            : `CRIME SCENE: ${currentLocation.name.toUpperCase()} // CLICK OBJECTS TO EXAMINE FORENSICS`}
         </div>
+
+        {/* UV Blacklight Toggle Control */}
+        <button
+          onClick={() => {
+            audio.playStamp();
+            setIsUVMode(!isUVMode);
+          }}
+          style={{
+            position: 'absolute',
+            top: 12,
+            right: 18,
+            background: isUVMode ? 'linear-gradient(135deg, #7e22ce, #9333ea)' : 'rgba(15, 23, 42, 0.85)',
+            color: isUVMode ? '#fff' : '#c084fc',
+            border: isUVMode ? '1px solid #e9d5ff' : '1px solid #9333ea',
+            borderRadius: '6px',
+            padding: '6px 14px',
+            fontSize: '0.75rem',
+            fontFamily: 'var(--font-mono)',
+            fontWeight: '700',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            boxShadow: isUVMode ? '0 0 16px rgba(147, 51, 234, 0.6)' : undefined,
+            zIndex: 25,
+            transition: 'all 0.2s'
+          }}
+        >
+          <Sparkles size={14} />
+          <span>{isUVMode ? 'UV BLACKLIGHT ACTIVE [ON]' : 'ENABLE UV FORENSIC LENS'}</span>
+        </button>
       </div>
 
       {/* Accessible Inspectables Grid List */}

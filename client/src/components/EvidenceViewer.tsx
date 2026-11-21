@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useGame } from '../game/state/GameStateContext';
 import { EvidenceItem, EvidenceCategory } from '../game/state/types';
 import { EvidenceGraphic } from './graphics/EvidenceIllustrations';
+import { InteractiveForensicTool } from './graphics/InteractiveForensicTools';
 import {
   Search,
   Filter,
@@ -256,6 +257,9 @@ export const EvidenceViewer: React.FC = () => {
                 {selectedEvidence.description}
               </p>
             </div>
+
+            {/* Interactive Forensic Mini-Workbench / Tool */}
+            <InteractiveForensicTool evidenceId={selectedEvidence.id} />
 
             <div style={{
               background: '#0a0d14',
