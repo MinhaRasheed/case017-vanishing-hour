@@ -115,9 +115,17 @@ export const CC3DLineup: React.FC<Props> = ({ discoveredTraits, totalScore, onRe
     // 6. Raycast click to select suspects
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
+    let pointerDownPos = { x: 0, y: 0 };
+
+    const onPointerDown = (e: MouseEvent) => {
+      pointerDownPos = { x: e.clientX, y: e.clientY };
+    };
 
     const onClick = (e: MouseEvent) => {
       if (arrestStage !== 'lineup') return;
+      const dist = Math.hypot(e.clientX - pointerDownPos.x, e.clientY - pointerDownPos.y);
+      if (dist > 8) return; // Ignore drag/orbit
+
       const rect = renderer.domElement.getBoundingClientRect();
       mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
@@ -137,6 +145,7 @@ export const CC3DLineup: React.FC<Props> = ({ discoveredTraits, totalScore, onRe
         }
       }
     };
+    renderer.domElement.addEventListener('pointerdown', onPointerDown);
     renderer.domElement.addEventListener('click', onClick);
 
     // 7. Render Loop
@@ -172,6 +181,7 @@ export const CC3DLineup: React.FC<Props> = ({ discoveredTraits, totalScore, onRe
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener('resize', handleResize);
+      renderer.domElement.removeEventListener('pointerdown', onPointerDown);
       renderer.domElement.removeEventListener('click', onClick);
       renderer.dispose();
     };
@@ -220,7 +230,7 @@ export const CC3DLineup: React.FC<Props> = ({ discoveredTraits, totalScore, onRe
   };
 
   const handleCaseClosed = () => {
-    audio.playEvidenceFound();
+    audio.playGavel();
     setArrestStage('closed');
   };
 
@@ -605,7 +615,10 @@ export const CC3DLineup: React.FC<Props> = ({ discoveredTraits, totalScore, onRe
           </div>
 
           <button
-            onClick={onReplay}
+            onClick={() => {
+              setArrestStage('lineup');
+              onReplay();
+            }}
             style={{
               background: 'linear-gradient(135deg, #10b981, #059669)',
               color: '#fff',

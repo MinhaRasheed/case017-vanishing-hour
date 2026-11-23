@@ -68,6 +68,16 @@ export const CriminalCaseApp: React.FC<CCAppProps> = ({ onSwitchMode }) => {
     }
   };
 
+  const handleReplay = () => {
+    restartCase();
+    setStars(3);
+    setEnergy(110);
+    setCash(4500);
+    setTotalScore(125000);
+    setDiscoveredTraits(['trait_gender_female']);
+    setActiveTab('tablet');
+  };
+
   const handleToggleAmbient = () => {
     toggleAmbientMusic();
     setAmbientActive(!ambientActive);
@@ -355,19 +365,13 @@ export const CriminalCaseApp: React.FC<CCAppProps> = ({ onSwitchMode }) => {
             <CC3DLineup
               discoveredTraits={discoveredTraits}
               totalScore={totalScore}
-              onReplay={() => {
-                restartCase();
-                setActiveTab('tablet');
-              }}
+              onReplay={handleReplay}
             />
           ) : (
             <CCArrestLineup
               discoveredTraits={discoveredTraits}
               totalScore={totalScore}
-              onReplay={() => {
-                restartCase();
-                setActiveTab('tablet');
-              }}
+              onReplay={handleReplay}
             />
           )
         )}

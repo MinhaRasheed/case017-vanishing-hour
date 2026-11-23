@@ -590,21 +590,28 @@ export const CC3DInterrogation: React.FC<Props> = ({ onGoToLineup }) => {
         </div>
 
         {/* Current Active Q&A */}
-        <div style={{ color: '#cbd5e1', fontSize: '0.85rem', marginBottom: '6px', fontFamily: 'monospace' }}>
-          {currentSuspect.dialogue[currentQuestionIdx]?.q}
-        </div>
-        <div style={{
-          color: '#fef08a',
-          fontSize: '0.95rem',
-          lineHeight: 1.45,
-          fontStyle: 'italic',
-          background: 'rgba(239, 68, 68, 0.1)',
-          borderLeft: '3px solid #ef4444',
-          padding: '8px 12px',
-          borderRadius: '0 6px 6px 0'
-        }}>
-          {currentSuspect.dialogue[currentQuestionIdx]?.a}
-        </div>
+        {(() => {
+          const activeQ = currentSuspect.dialogue[currentQuestionIdx] || currentSuspect.dialogue[0];
+          return (
+            <>
+              <div style={{ color: '#cbd5e1', fontSize: '0.85rem', marginBottom: '6px', fontFamily: 'monospace' }}>
+                {activeQ?.q}
+              </div>
+              <div style={{
+                color: '#fef08a',
+                fontSize: '0.95rem',
+                lineHeight: 1.45,
+                fontStyle: 'italic',
+                background: 'rgba(239, 68, 68, 0.1)',
+                borderLeft: '3px solid #ef4444',
+                padding: '8px 12px',
+                borderRadius: '0 6px 6px 0'
+              }}>
+                {activeQ?.a}
+              </div>
+            </>
+          );
+        })()}
       </div>
     </div>
   );

@@ -26,8 +26,45 @@ class AudioService {
       }
     }
     if (this.ctx && this.ctx.state === 'suspended') {
-      this.ctx.resume();
+      this.ctx.resume().catch(() => {});
     }
+  }
+
+  public playGavel() {
+    this.initContext();
+    if (!this.ctx || !this.masterGain || this.isMuted) return;
+
+    const now = this.ctx.currentTime;
+
+    // Hard wood crack transient
+    const snapOsc = this.ctx.createOscillator();
+    const snapGain = this.ctx.createGain();
+    snapOsc.type = 'triangle';
+    snapOsc.frequency.setValueAtTime(450, now);
+    snapOsc.frequency.exponentialRampToValueAtTime(80, now + 0.08);
+
+    snapGain.gain.setValueAtTime(0.4, now);
+    snapGain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+
+    snapOsc.connect(snapGain);
+    snapGain.connect(this.masterGain);
+    snapOsc.start(now);
+    snapOsc.stop(now + 0.1);
+
+    // Deep courtroom mahogany thud & resonance
+    const thudOsc = this.ctx.createOscillator();
+    const thudGain = this.ctx.createGain();
+    thudOsc.type = 'sine';
+    thudOsc.frequency.setValueAtTime(95, now);
+    thudOsc.frequency.exponentialRampToValueAtTime(35, now + 0.6);
+
+    thudGain.gain.setValueAtTime(0.5, now);
+    thudGain.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
+
+    thudOsc.connect(thudGain);
+    thudGain.connect(this.masterGain);
+    thudOsc.start(now);
+    thudOsc.stop(now + 0.75);
   }
 
   public setMuted(muted: boolean) {

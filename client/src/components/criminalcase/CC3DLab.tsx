@@ -41,6 +41,7 @@ export const CC3DLab: React.FC<Props> = ({
   const mountRef = useRef<HTMLDivElement>(null);
   const [hoveredSample, setHoveredSample] = useState<SampleItem | null>(null);
   const [analyzingId, setAnalyzingId] = useState<string | null>(null);
+  const [starWarning, setStarWarning] = useState<boolean>(false);
   const [cameraView, setCameraView] = useState<'overview' | 'tray' | 'microscope' | 'spectrometer'>('overview');
 
   const sceneRef = useRef<THREE.Scene | null>(null);
@@ -127,6 +128,11 @@ export const CC3DLab: React.FC<Props> = ({
     // 6. Raycast detection
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
+    let pointerDownPos = { x: 0, y: 0 };
+
+    const onPointerDown = (e: MouseEvent) => {
+      pointerDownPos = { x: e.clientX, y: e.clientY };
+    };
 
     const onPointerMove = (e: MouseEvent) => {
       const rect = renderer.domElement.getBoundingClientRect();
@@ -155,6 +161,9 @@ export const CC3DLab: React.FC<Props> = ({
     };
 
     const onClick = (e: MouseEvent) => {
+      const dist = Math.hypot(e.clientX - pointerDownPos.x, e.clientY - pointerDownPos.y);
+      if (dist > 8) return; // Ignore drag/orbit
+
       const rect = renderer.domElement.getBoundingClientRect();
       mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
@@ -175,6 +184,7 @@ export const CC3DLab: React.FC<Props> = ({
       }
     };
 
+    renderer.domElement.addEventListener('pointerdown', onPointerDown);
     renderer.domElement.addEventListener('pointermove', onPointerMove);
     renderer.domElement.addEventListener('click', onClick);
 
@@ -217,6 +227,7 @@ export const CC3DLab: React.FC<Props> = ({
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener('resize', handleResize);
+      renderer.domElement.removeEventListener('pointerdown', onPointerDown);
       renderer.domElement.removeEventListener('pointermove', onPointerMove);
       renderer.domElement.removeEventListener('click', onClick);
       renderer.dispose();
@@ -248,7 +259,9 @@ export const CC3DLab: React.FC<Props> = ({
     }
 
     if (!onSpendStar(1)) {
-      alert("You need at least 1 Police Star to analyze this sample! Search Penthouse 4B in Crime Scene mode to earn more stars.");
+      audio.playDullClick();
+      setStarWarning(true);
+      setTimeout(() => setStarWarning(false), 3500);
       return;
     }
 
@@ -674,6 +687,31 @@ export const CC3DLab: React.FC<Props> = ({
           <span>VIEW KILLER PROFILE ({discoveredTraits.length}/4) →</span>
         </button>
       </div>
+
+      {/* Star Warning Toast */}
+      {starWarning && (
+        <div style={{
+          position: 'absolute',
+          top: 70,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          background: 'rgba(239, 68, 68, 0.95)',
+          color: '#fff',
+          border: '2px solid #fecaca',
+          borderRadius: '8px',
+          padding: '10px 20px',
+          fontWeight: '800',
+          fontSize: '0.85rem',
+          boxShadow: '0 0 20px rgba(239, 68, 68, 0.6)',
+          zIndex: 50,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px'
+        }}>
+          <Star size={16} fill="#fef08a" color="#f59e0b" />
+          <span>YOU NEED AT LEAST 1 POLICE STAR! SEARCH PENTHOUSE 4B IN CRIME SCENE TO EARN STARS.</span>
+        </div>
+      )}
 
       {/* Analyzing Laser Animation Indicator */}
       {analyzingId && (

@@ -27,7 +27,7 @@ export const CC3DProfile: React.FC<Props> = ({ discoveredTraits, onGoToLineup })
   const controlsRef = useRef<OrbitControls | null>(null);
   const cardsGroupRef = useRef<THREE.Group | null>(null);
 
-  const SUSPECTS = [
+  const SUSPECTS_BASE = [
     {
       id: 'dr_eleanor_sterling',
       name: 'Dr. Eleanor Sterling',
@@ -36,8 +36,9 @@ export const CC3DProfile: React.FC<Props> = ({ discoveredTraits, onGoToLineup })
       job: 'Doctor',
       magnet: 'Yes',
       disinherited: 'Yes',
-      matchScore: 100,
-      innocent: false,
+      isCulprit: true,
+      eliminatedBy: [] as string[],
+      traitsMatched: ['trait_gender_female', 'trait_medical_access', 'trait_neodymium_magnet', 'trait_revoked_will'],
       color: 0x0284c7,
       x: -2.25
     },
@@ -49,8 +50,9 @@ export const CC3DProfile: React.FC<Props> = ({ discoveredTraits, onGoToLineup })
       job: 'Maintenance Super',
       magnet: 'No',
       disinherited: 'No',
-      matchScore: 25,
-      innocent: true,
+      isCulprit: false,
+      eliminatedBy: ['trait_gender_female', 'trait_medical_access'],
+      traitsMatched: [] as string[],
       color: 0x1d4ed8,
       x: -0.75
     },
@@ -62,8 +64,9 @@ export const CC3DProfile: React.FC<Props> = ({ discoveredTraits, onGoToLineup })
       job: 'Philanthropist',
       magnet: 'No',
       disinherited: 'No',
-      matchScore: 50,
-      innocent: true,
+      isCulprit: false,
+      eliminatedBy: ['trait_medical_access', 'trait_revoked_will'],
+      traitsMatched: ['trait_gender_female'],
       color: 0x9333ea,
       x: 0.75
     },
@@ -75,12 +78,24 @@ export const CC3DProfile: React.FC<Props> = ({ discoveredTraits, onGoToLineup })
       job: 'Photographer',
       magnet: 'No',
       disinherited: 'No',
-      matchScore: 0,
-      innocent: true,
+      isCulprit: false,
+      eliminatedBy: ['trait_gender_female', 'trait_medical_access', 'trait_revoked_will'],
+      traitsMatched: [] as string[],
       color: 0xd97706,
       x: 2.25
     }
   ];
+
+  const SUSPECTS = SUSPECTS_BASE.map(s => {
+    const isEliminated = s.eliminatedBy.some(t => discoveredTraits.includes(t));
+    const matchCount = s.traitsMatched.filter(t => discoveredTraits.includes(t)).length;
+    const matchScore = s.isCulprit ? 100 : Math.round((matchCount / Math.max(1, discoveredTraits.length)) * 50);
+    return {
+      ...s,
+      innocent: isEliminated,
+      matchScore: s.isCulprit ? 100 : matchScore
+    };
+  });
 
   useEffect(() => {
     if (!mountRef.current) return;
@@ -125,8 +140,16 @@ export const CC3DProfile: React.FC<Props> = ({ discoveredTraits, onGoToLineup })
     // 6. Raycast click on suspect cards
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
+    let pointerDownPos = { x: 0, y: 0 };
+
+    const onPointerDown = (e: MouseEvent) => {
+      pointerDownPos = { x: e.clientX, y: e.clientY };
+    };
 
     const onClick = (e: MouseEvent) => {
+      const dist = Math.hypot(e.clientX - pointerDownPos.x, e.clientY - pointerDownPos.y);
+      if (dist > 8) return; // Ignore drag/orbit
+
       const rect = renderer.domElement.getBoundingClientRect();
       mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
@@ -146,6 +169,8 @@ export const CC3DProfile: React.FC<Props> = ({ discoveredTraits, onGoToLineup })
         }
       }
     };
+
+    renderer.domElement.addEventListener('pointerdown', onPointerDown);
     renderer.domElement.addEventListener('click', onClick);
 
     // 7. Render loop
@@ -170,37 +195,20 @@ export const CC3DProfile: React.FC<Props> = ({ discoveredTraits, onGoToLineup })
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener('resize', handleResize);
+      renderer.domElement.removeEventListener('pointerdown', onPointerDown);
       renderer.domElement.removeEventListener('click', onClick);
       renderer.dispose();
     };
   }, []);
 
-  const buildProfileBoard = (scene: THREE.Scene) => {
-    // Lighting
-    const ambient = new THREE.AmbientLight(0x1e293b, 0.9);
-    scene.add(ambient);
+  // Re-render suspect cards when traits change
+  useEffect(() => {
+    if (!sceneRef.current || !cardsGroupRef.current) return;
+    renderSuspectCards(cardsGroupRef.current);
+  }, [discoveredTraits]);
 
-    const boardSpot = new THREE.DirectionalLight(0xfef08a, 1.2);
-    boardSpot.position.set(0, 3, 5);
-    scene.add(boardSpot);
-
-    // 1. CORK INVESTIGATION BOARD
-    const boardFrame = new THREE.Mesh(
-      new THREE.BoxGeometry(6.4, 3.8, 0.15),
-      new THREE.MeshStandardMaterial({ color: 0x58240c, roughness: 0.6 })
-    );
-    boardFrame.position.set(0, 0.3, -0.1);
-    scene.add(boardFrame);
-
-    const corkMat = new THREE.MeshStandardMaterial({ color: 0xb45309, roughness: 0.95 });
-    const cork = new THREE.Mesh(new THREE.BoxGeometry(6.2, 3.6, 0.12), corkMat);
-    cork.position.set(0, 0.3, -0.05);
-    scene.add(cork);
-
-    // 2. SUSPECT CARDS GROUP
-    const cGroup = new THREE.Group();
-    cardsGroupRef.current = cGroup;
-    scene.add(cGroup);
+  const renderSuspectCards = (cGroup: THREE.Group) => {
+    cGroup.clear();
 
     SUSPECTS.forEach((s) => {
       const cardGroup = new THREE.Group();
@@ -238,7 +246,7 @@ export const CC3DProfile: React.FC<Props> = ({ discoveredTraits, onGoToLineup })
         stamp.rotation.z = -0.25;
         stamp.position.set(0, 0.35, 0.04);
         cardGroup.add(stamp);
-      } else {
+      } else if (discoveredTraits.length >= 3) {
         const killerTag = new THREE.Mesh(
           new THREE.BoxGeometry(1.0, 0.34, 0.02),
           new THREE.MeshStandardMaterial({ color: 0xef4444, emissive: 0xb91c1c, emissiveIntensity: 0.6 })
@@ -250,6 +258,35 @@ export const CC3DProfile: React.FC<Props> = ({ discoveredTraits, onGoToLineup })
       cardGroup.position.set(s.x, 0.3, 0.02);
       cGroup.add(cardGroup);
     });
+  };
+
+  const buildProfileBoard = (scene: THREE.Scene) => {
+    // Lighting
+    const ambient = new THREE.AmbientLight(0x1e293b, 0.9);
+    scene.add(ambient);
+
+    const boardSpot = new THREE.DirectionalLight(0xfef08a, 1.2);
+    boardSpot.position.set(0, 3, 5);
+    scene.add(boardSpot);
+
+    // 1. CORK INVESTIGATION BOARD
+    const boardFrame = new THREE.Mesh(
+      new THREE.BoxGeometry(6.4, 3.8, 0.15),
+      new THREE.MeshStandardMaterial({ color: 0x58240c, roughness: 0.6 })
+    );
+    boardFrame.position.set(0, 0.3, -0.1);
+    scene.add(boardFrame);
+
+    const corkMat = new THREE.MeshStandardMaterial({ color: 0xb45309, roughness: 0.95 });
+    const cork = new THREE.Mesh(new THREE.BoxGeometry(6.2, 3.6, 0.12), corkMat);
+    cork.position.set(0, 0.3, -0.05);
+    scene.add(cork);
+
+    // 2. SUSPECT CARDS GROUP
+    const cGroup = new THREE.Group();
+    cardsGroupRef.current = cGroup;
+    scene.add(cGroup);
+    renderSuspectCards(cGroup);
 
     // 3. RED STRING CONNECTORS (Crime yarn connecting clues)
     const stringMat = new THREE.LineBasicMaterial({ color: 0xdc2626, linewidth: 2 });

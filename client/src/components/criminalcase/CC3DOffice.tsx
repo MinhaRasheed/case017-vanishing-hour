@@ -84,6 +84,11 @@ export const CC3DOffice: React.FC<Props> = ({
     // 6. Raycasting
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
+    let pointerDownPos = { x: 0, y: 0 };
+
+    const onPointerDown = (e: MouseEvent) => {
+      pointerDownPos = { x: e.clientX, y: e.clientY };
+    };
 
     const onPointerMove = (e: MouseEvent) => {
       const rect = renderer.domElement.getBoundingClientRect();
@@ -110,6 +115,9 @@ export const CC3DOffice: React.FC<Props> = ({
     };
 
     const onClick = (e: MouseEvent) => {
+      const dist = Math.hypot(e.clientX - pointerDownPos.x, e.clientY - pointerDownPos.y);
+      if (dist > 8) return; // Ignore drag/orbit
+
       const rect = renderer.domElement.getBoundingClientRect();
       mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
@@ -131,6 +139,7 @@ export const CC3DOffice: React.FC<Props> = ({
       }
     };
 
+    renderer.domElement.addEventListener('pointerdown', onPointerDown);
     renderer.domElement.addEventListener('pointermove', onPointerMove);
     renderer.domElement.addEventListener('click', onClick);
 
@@ -160,6 +169,7 @@ export const CC3DOffice: React.FC<Props> = ({
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener('resize', handleResize);
+      renderer.domElement.removeEventListener('pointerdown', onPointerDown);
       renderer.domElement.removeEventListener('pointermove', onPointerMove);
       renderer.domElement.removeEventListener('click', onClick);
       renderer.dispose();

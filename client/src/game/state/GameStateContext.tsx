@@ -151,11 +151,23 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     setGameState(prev => {
       const currentLoc = caseBundle.locations.find(l => l.id === prev.currentLocationId);
-      const targetObj = currentLoc?.inspectables.find(o => o.id === objectId);
+      
+      // 1. Try to find inspectable in current location or across all locations
+      let targetObj = currentLoc?.inspectables.find(o => o.id === objectId || o.revealedEvidenceId === objectId);
+      if (!targetObj) {
+        for (const loc of caseBundle.locations) {
+          targetObj = loc.inspectables.find(o => o.id === objectId || o.revealedEvidenceId === objectId);
+          if (targetObj) break;
+        }
+      }
 
       if (targetObj) {
         text = targetObj.inspectionText;
       }
+
+      // Check if objectId is an evidence item ID directly
+      const directEv = caseBundle.evidence.find(e => e.id === objectId);
+      const evidenceToRevealId = targetObj?.revealedEvidenceId || directEv?.id;
 
       const inspected = prev.inspectedObjectIds.includes(objectId)
         ? prev.inspectedObjectIds
@@ -165,10 +177,10 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const newLogs = [...prev.historyLogs];
       let scoreIncrease = 12000;
 
-      if (targetObj?.revealedEvidenceId && !prev.discoveredEvidenceIds.includes(targetObj.revealedEvidenceId)) {
-        newDiscovered.push(targetObj.revealedEvidenceId);
+      if (evidenceToRevealId && !prev.discoveredEvidenceIds.includes(evidenceToRevealId)) {
+        newDiscovered.push(evidenceToRevealId);
         scoreIncrease += 28000;
-        const ev = caseBundle.evidence.find(e => e.id === targetObj.revealedEvidenceId);
+        const ev = caseBundle.evidence.find(e => e.id === evidenceToRevealId);
         if (ev) {
           discoveredItem = ev as unknown as EvidenceItem;
           audio.playEvidenceFound();

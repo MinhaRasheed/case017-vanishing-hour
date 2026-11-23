@@ -29,14 +29,14 @@ interface HiddenItem {
 
 const SCENE_ITEMS: HiddenItem[] = [
   { id: 'whiskey_tumbler', name: 'Whiskey Tumbler', x: 67, y: 76, radius: 6, revealedEvidenceId: 'ev_whiskey_sedative' },
-  { id: 'thinkpad_laptop', name: 'ThinkPad Laptop', x: 67, y: 49, radius: 8, revealedEvidenceId: 'ev_laptop_spreadsheets' },
-  { id: 'alarm_keypad', name: 'Honeywell Keypad', x: 23.5, y: 44, radius: 5, revealedEvidenceId: 'ev_alarm_timer' },
-  { id: 'deadbolt_lock', name: 'Scuffed Deadbolt', x: 12, y: 56, radius: 5, revealedEvidenceId: 'ev_deadbolt_scuff' },
-  { id: 'neodymium_magnet', name: 'Neodymium Magnet', x: 88, y: 46, radius: 8, revealedEvidenceId: 'ev_deadbolt_scuff' },
-  { id: 'torn_will', name: 'Torn Will Fragment', x: 48, y: 84, radius: 5, revealedEvidenceId: 'ev_torn_will' },
-  { id: 'access_card', name: 'Access Keycard', x: 74, y: 55, radius: 4, revealedEvidenceId: 'ev_damaged_access_card' },
-  { id: 'prescrip_vial', name: 'Sedative Ampoule', x: 86, y: 70, radius: 4, revealedEvidenceId: 'ev_midazolam_ampoule' },
-  { id: 'gold_watch', name: 'Rolex Gold Watch', x: 62, y: 54, radius: 4 },
+  { id: 'thinkpad_laptop', name: 'ThinkPad Laptop', x: 67, y: 49, radius: 8, revealedEvidenceId: 'ev_audit_spreadsheet' },
+  { id: 'alarm_keypad', name: 'Honeywell Keypad', x: 23.5, y: 44, radius: 5, revealedEvidenceId: 'ev_panic_alarm_timer' },
+  { id: 'deadbolt_lock', name: 'Scuffed Deadbolt', x: 12, y: 56, radius: 5, revealedEvidenceId: 'ev_door_deadbolt_scuffs' },
+  { id: 'neodymium_magnet', name: 'Neodymium Magnet', x: 88, y: 46, radius: 8, revealedEvidenceId: 'ev_neodymium_magnet' },
+  { id: 'torn_will', name: 'Torn Will Fragment', x: 48, y: 84, radius: 5, revealedEvidenceId: 'ev_torn_bribery_note' },
+  { id: 'access_card', name: 'Access Keycard', x: 74, y: 55, radius: 4, revealedEvidenceId: 'ev_access_card_terminal' },
+  { id: 'prescrip_vial', name: 'Sedative Ampoule', x: 86, y: 70, radius: 4, revealedEvidenceId: 'ev_discarded_ampoule' },
+  { id: 'gold_watch', name: 'Rolex Gold Watch', x: 62, y: 54, radius: 4, revealedEvidenceId: 'ev_pawn_slip_overdraft' },
   { id: 'muddy_footprint', name: 'Shoe Impression', x: 38, y: 78, radius: 6, revealedEvidenceId: 'ev_carpet_wheel_treads' },
 ];
 

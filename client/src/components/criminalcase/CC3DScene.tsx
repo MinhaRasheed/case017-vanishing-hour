@@ -40,6 +40,11 @@ export const CC3DScene: React.FC<Props> = ({
   const mountRef = useRef<HTMLDivElement>(null);
   const [hoveredName, setHoveredName] = useState<string | null>(null);
   const [cameraView, setCameraView] = useState<'overview' | 'table' | 'desk' | 'door' | 'hearth'>('overview');
+  const foundItemIdsRef = useRef<string[]>(foundItemIds);
+
+  useEffect(() => {
+    foundItemIdsRef.current = foundItemIds;
+  }, [foundItemIds]);
 
   // Three.js internal references
   const sceneRef = useRef<THREE.Scene | null>(null);
@@ -95,6 +100,11 @@ export const CC3DScene: React.FC<Props> = ({
     // 6. Interactive Raycasting setup
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
+    let pointerDownPos = { x: 0, y: 0 };
+
+    const onPointerDown = (e: MouseEvent) => {
+      pointerDownPos = { x: e.clientX, y: e.clientY };
+    };
 
     const onPointerMove = (e: MouseEvent) => {
       const rect = renderer.domElement.getBoundingClientRect();
@@ -111,8 +121,9 @@ export const CC3DScene: React.FC<Props> = ({
           topMesh = topMesh.parent;
         }
         if (topMesh.userData.clueName) {
-          setHoveredName(topMesh.userData.clueName);
-          container.style.cursor = 'pointer';
+          const isCollected = foundItemIdsRef.current.includes(topMesh.userData.clueId);
+          setHoveredName(isCollected ? `[COLLECTED] ${topMesh.userData.clueName}` : topMesh.userData.clueName);
+          container.style.cursor = isCollected ? 'default' : 'pointer';
           return;
         }
       }
@@ -121,6 +132,9 @@ export const CC3DScene: React.FC<Props> = ({
     };
 
     const onClick = (e: MouseEvent) => {
+      const dist = Math.hypot(e.clientX - pointerDownPos.x, e.clientY - pointerDownPos.y);
+      if (dist > 8) return; // Ignore drag/orbit
+
       const rect = renderer.domElement.getBoundingClientRect();
       mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
@@ -138,6 +152,10 @@ export const CC3DScene: React.FC<Props> = ({
         const clueId = topMesh.userData.clueId;
         const clueName = topMesh.userData.clueName;
         if (clueId && clueName) {
+          if (foundItemIdsRef.current.includes(clueId)) {
+            audio.playDullClick();
+            return;
+          }
           onItemFound(clueId, clueName);
 
           // Animate small pulse on the mesh
@@ -148,6 +166,7 @@ export const CC3DScene: React.FC<Props> = ({
       }
     };
 
+    renderer.domElement.addEventListener('pointerdown', onPointerDown);
     renderer.domElement.addEventListener('pointermove', onPointerMove);
     renderer.domElement.addEventListener('click', onClick);
 
@@ -198,6 +217,7 @@ export const CC3DScene: React.FC<Props> = ({
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener('resize', handleResize);
+      renderer.domElement.removeEventListener('pointerdown', onPointerDown);
       renderer.domElement.removeEventListener('pointermove', onPointerMove);
       renderer.domElement.removeEventListener('click', onClick);
       renderer.dispose();
