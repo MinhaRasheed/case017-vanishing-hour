@@ -14,11 +14,12 @@ import { DeductionResolution } from './components/DeductionResolution';
 import { CaseResolution } from './components/CaseResolution';
 import { CaseTasksView } from './components/CaseTasksView';
 import { PoliceLineupView } from './components/PoliceLineupView';
+import { CriminalCaseApp } from './components/criminalcase/CriminalCaseApp';
 
 import './styles/theme.css';
 import './styles/components.css';
 
-const GameRouter: React.FC = () => {
+const GameRouter: React.FC<{ onSwitchToCC: () => void }> = ({ onSwitchToCC }) => {
   const { gameState } = useGame();
 
   const renderScreen = () => {
@@ -58,6 +59,26 @@ const GameRouter: React.FC = () => {
   return (
     <div className="case-container noir-scanline">
       <Header />
+      <div style={{ background: '#1e3a8a', padding: '6px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <span style={{ fontSize: '0.8rem', color: '#bfdbfe', fontWeight: 'bold' }}>
+          ⭐ CRIMINAL CASE EDITION IS READY!
+        </span>
+        <button
+          onClick={onSwitchToCC}
+          style={{
+            background: '#f59e0b',
+            color: '#000',
+            border: 'none',
+            borderRadius: '4px',
+            padding: '4px 12px',
+            fontSize: '0.75rem',
+            fontWeight: '900',
+            cursor: 'pointer'
+          }}
+        >
+          Switch to Criminal Case Mode →
+        </button>
+      </div>
       <main style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         {renderScreen()}
       </main>
@@ -78,9 +99,15 @@ const GameRouter: React.FC = () => {
 };
 
 export const App: React.FC = () => {
+  const [gameMode, setGameMode] = React.useState<'criminal_case' | 'noir'>('criminal_case');
+
   return (
     <GameProvider>
-      <GameRouter />
+      {gameMode === 'criminal_case' ? (
+        <CriminalCaseApp onSwitchMode={() => setGameMode('noir')} />
+      ) : (
+        <GameRouter onSwitchToCC={() => setGameMode('criminal_case')} />
+      )}
     </GameProvider>
   );
 };
