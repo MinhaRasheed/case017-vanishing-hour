@@ -5,6 +5,11 @@ import { CCLabTab } from './CCLabTab';
 import { CCProfileTab } from './CCProfileTab';
 import { CCInterrogateTab } from './CCInterrogateTab';
 import { CCArrestLineup } from './CCArrestLineup';
+import { CC3DOffice } from './CC3DOffice';
+import { CC3DLab } from './CC3DLab';
+import { CC3DProfile } from './CC3DProfile';
+import { CC3DInterrogation } from './CC3DInterrogation';
+import { CC3DLineup } from './CC3DLineup';
 import { CharacterPortrait } from '../graphics/CharacterPortraits';
 import { audio } from '../../services/audioService';
 import '../../styles/criminalcase.css';
@@ -22,7 +27,9 @@ import {
   VolumeX,
   Music,
   CheckCircle,
-  ArrowRight
+  ArrowRight,
+  Box,
+  Layers
 } from 'lucide-react';
 
 interface CCAppProps {
@@ -32,7 +39,8 @@ interface CCAppProps {
 export const CriminalCaseApp: React.FC<CCAppProps> = ({ onSwitchMode }) => {
   const { gameState, restartCase, toggleAudioMute, toggleAmbientMusic } = useGame();
   const [activeTab, setActiveTab] = useState<'tablet' | 'scene' | 'lab' | 'profile' | 'interrogate' | 'lineup'>('tablet');
-  const [stars, setStars] = useState<number>(3); // starts with initial stars
+  const [use3D, setUse3D] = useState<boolean>(true); // DEFAULT 100% 3D MODE
+  const [stars, setStars] = useState<number>(3); // initial stars
   const [energy, setEnergy] = useState<number>(110);
   const [cash, setCash] = useState<number>(4500);
   const [totalScore, setTotalScore] = useState<number>(125000);
@@ -93,6 +101,32 @@ export const CriminalCaseApp: React.FC<CCAppProps> = ({ onSwitchMode }) => {
 
         {/* Resources: Energy, Cash, Stars */}
         <div className="cc-resources">
+          {/* 3D vs 2D Engine Switcher Badge */}
+          <button
+            onClick={() => {
+              setUse3D(!use3D);
+              audio.playCardFlip();
+            }}
+            style={{
+              background: use3D ? 'linear-gradient(135deg, #0284c7, #2563eb)' : '#1e293b',
+              color: '#fff',
+              border: use3D ? '1px solid #38bdf8' : '1px solid #475569',
+              borderRadius: '20px',
+              padding: '5px 14px',
+              fontSize: '0.75rem',
+              fontWeight: '900',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              boxShadow: use3D ? '0 0 14px rgba(56, 189, 248, 0.4)' : 'none'
+            }}
+            title="Toggle between full 3D interactive WebGL world and 2D mode"
+          >
+            <Box size={14} />
+            <span>{use3D ? '3D REALITY ENGINE [ON]' : '2D BLUEPRINT MODE'}</span>
+          </button>
+
           {/* Energy Bar */}
           <div className="cc-stat-pill" style={{ borderColor: '#10b981', color: '#34d399' }} title="Investigation Energy">
             <Zap size={16} fill="#10b981" color="#10b981" />
@@ -167,7 +201,7 @@ export const CriminalCaseApp: React.FC<CCAppProps> = ({ onSwitchMode }) => {
             onClick={() => { setActiveTab('tablet'); audio.playCardFlip(); }}
           >
             <Shield size={16} />
-            <span>Case Tablet</span>
+            <span>3D Police HQ</span>
           </button>
 
           <button
@@ -175,7 +209,7 @@ export const CriminalCaseApp: React.FC<CCAppProps> = ({ onSwitchMode }) => {
             onClick={() => { setActiveTab('scene'); audio.playCardFlip(); }}
           >
             <Search size={16} />
-            <span>Crime Scene</span>
+            <span>3D Crime Scene</span>
           </button>
 
           <button
@@ -183,7 +217,7 @@ export const CriminalCaseApp: React.FC<CCAppProps> = ({ onSwitchMode }) => {
             onClick={() => { setActiveTab('lab'); audio.playCardFlip(); }}
           >
             <Pipette size={16} />
-            <span>Forensics Lab</span>
+            <span>3D Forensics Lab</span>
           </button>
 
           <button
@@ -191,7 +225,7 @@ export const CriminalCaseApp: React.FC<CCAppProps> = ({ onSwitchMode }) => {
             onClick={() => { setActiveTab('profile'); audio.playCardFlip(); }}
           >
             <Users size={16} />
-            <span>Killer Profile</span>
+            <span>3D Killer Profile</span>
           </button>
 
           <button
@@ -199,7 +233,7 @@ export const CriminalCaseApp: React.FC<CCAppProps> = ({ onSwitchMode }) => {
             onClick={() => { setActiveTab('interrogate'); audio.playCardFlip(); }}
           >
             <MessageSquare size={16} />
-            <span>Interrogate</span>
+            <span>3D Interrogate</span>
           </button>
 
           <button
@@ -211,193 +245,134 @@ export const CriminalCaseApp: React.FC<CCAppProps> = ({ onSwitchMode }) => {
             onClick={() => { setActiveTab('lineup'); audio.playCardFlip(); }}
           >
             <Scale size={16} />
-            <span>Arrest Lineup</span>
+            <span>3D Arrest Lineup</span>
           </button>
         </div>
       </div>
 
       {/* =========================================================================
-          ACTIVE VIEW CONTENT
+          ACTIVE VIEW CONTENT (100% 3D ENGINE INTEGRATION)
           ========================================================================= */}
-      <main style={{ flex: 1, paddingBottom: '40px' }}>
-        {/* TAB 1: MAIN CASE TABLET HUB */}
+      <main style={{ flex: 1, padding: '16px', maxWidth: '1240px', margin: '0 auto', width: '100%' }}>
+        {/* TAB 1: MAIN CASE HUB (3D DETECTIVE OFFICE) */}
         {activeTab === 'tablet' && (
-          <div style={{ maxWidth: '1100px', margin: '24px auto', padding: '0 16px' }}>
-            {/* Officer Jack Partner Dialogue */}
-            <div style={{
-              background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
-              border: '2px solid #3b82f6',
-              borderRadius: '12px',
-              padding: '20px 24px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '20px',
-              marginBottom: '24px',
-              boxShadow: '0 8px 30px rgba(59, 130, 246, 0.25)'
-            }}>
-              <CharacterPortrait id="detective_partner" size={85} showBadge={false} />
-              <div style={{ flex: 1 }}>
-                <div style={{ color: '#93c5fd', fontFamily: 'monospace', fontSize: '0.8rem', fontWeight: 'bold' }}>
-                  OFFICER JACK VANCE // PARTNER BRIEFING
+          use3D ? (
+            <CC3DOffice
+              onNavigate={(tab) => setActiveTab(tab)}
+              stars={stars}
+              score={totalScore}
+              discoveredTraitsCount={discoveredTraits.length}
+            />
+          ) : (
+            <div style={{ maxWidth: '1100px', margin: '16px auto' }}>
+              <div style={{
+                background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
+                border: '2px solid #3b82f6',
+                borderRadius: '12px',
+                padding: '20px 24px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '20px',
+                marginBottom: '24px'
+              }}>
+                <CharacterPortrait id="detective_partner" size={85} showBadge={false} />
+                <div style={{ flex: 1 }}>
+                  <div style={{ color: '#93c5fd', fontFamily: 'monospace', fontSize: '0.8rem', fontWeight: 'bold' }}>
+                    OFFICER JACK VANCE // PARTNER BRIEFING
+                  </div>
+                  <h2 style={{ fontSize: '1.6rem', color: '#fff', fontWeight: '900', margin: '2px 0 6px' }}>
+                    CASE 017: THE VANISHING HOUR
+                  </h2>
+                  <p style={{ color: '#cbd5e1', fontSize: '0.95rem', margin: 0, fontStyle: 'italic', lineHeight: 1.5 }}>
+                    "At 11:47 PM, tech billionaire Timothy Vance vanished from his locked penthouse with no forced entry. Let's hit the crime scene, find hidden evidence, earn police stars, and run lab tests with Dr. Grace to profile the killer!"
+                  </p>
                 </div>
-                <h2 style={{ fontSize: '1.6rem', color: '#fff', fontWeight: '900', margin: '2px 0 6px' }}>
-                  CASE 017: THE VANISHING HOUR
-                </h2>
-                <p style={{ color: '#cbd5e1', fontSize: '0.95rem', margin: 0, fontStyle: 'italic', lineHeight: 1.5 }}>
-                  "At 11:47 PM, tech billionaire Timothy Vance vanished from his locked penthouse with no forced entry. Let's hit the crime scene, find hidden evidence, earn police stars, and run lab tests with Dr. Grace to profile the killer!"
-                </p>
-              </div>
-
-              <button
-                className="btn-primary"
-                style={{
-                  padding: '12px 24px',
-                  fontSize: '0.95rem',
-                  fontWeight: '800',
-                  background: 'linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%)'
-                }}
-                onClick={() => setActiveTab('scene')}
-              >
-                <span>Enter Crime Scene →</span>
-              </button>
-            </div>
-
-            {/* Case Progress Tasks Tablet */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
-              {/* Card 1: Crime Scene */}
-              <div
-                onClick={() => setActiveTab('scene')}
-                style={{
-                  background: '#0f172a',
-                  border: '2px solid #38bdf8',
-                  borderRadius: '10px',
-                  padding: '18px',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s',
-                  boxShadow: '0 4px 16px rgba(56, 189, 248, 0.15)'
-                }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                  <Search size={24} color="#38bdf8" />
-                  <span style={{ background: '#0284c7', color: '#fff', fontSize: '0.7rem', fontWeight: 'bold', padding: '3px 8px', borderRadius: '4px' }}>
-                    PLAY SCENE
-                  </span>
-                </div>
-                <h3 style={{ fontSize: '1.15rem', color: '#fff', fontWeight: '800', margin: '0 0 6px' }}>
-                  Penthouse 4B Crime Scene
-                </h3>
-                <p style={{ color: '#94a3b8', fontSize: '0.85rem', lineHeight: 1.4, margin: '0 0 12px' }}>
-                  Find 10 hidden forensic artifacts to earn police stars and boost your case score!
-                </p>
-                <span style={{ color: '#38bdf8', fontSize: '0.8rem', fontWeight: 'bold' }}>
-                  Click to Search Scene →
-                </span>
-              </div>
-
-              {/* Card 2: Crime Lab */}
-              <div
-                onClick={() => setActiveTab('lab')}
-                style={{
-                  background: '#0f172a',
-                  border: '2px solid #10b981',
-                  borderRadius: '10px',
-                  padding: '18px',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s',
-                  boxShadow: '0 4px 16px rgba(16, 185, 129, 0.15)'
-                }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                  <Pipette size={24} color="#10b981" />
-                  <span style={{ background: '#059669', color: '#fff', fontSize: '0.7rem', fontWeight: 'bold', padding: '3px 8px', borderRadius: '4px' }}>
-                    ⭐ SPEND STARS
-                  </span>
-                </div>
-                <h3 style={{ fontSize: '1.15rem', color: '#fff', fontWeight: '800', margin: '0 0 6px' }}>
-                  Forensic Laboratory
-                </h3>
-                <p style={{ color: '#94a3b8', fontSize: '0.85rem', lineHeight: 1.4, margin: '0 0 12px' }}>
-                  Run chemical spectrometry, magnetic flux tests, and document forensics with Dr. Grace!
-                </p>
-                <span style={{ color: '#10b981', fontSize: '0.8rem', fontWeight: 'bold' }}>
-                  Open Crime Lab ({discoveredTraits.length}/4 Traits) →
-                </span>
-              </div>
-
-              {/* Card 3: Killer Lineup */}
-              <div
-                onClick={() => setActiveTab('lineup')}
-                style={{
-                  background: '#0f172a',
-                  border: '2px solid #ef4444',
-                  borderRadius: '10px',
-                  padding: '18px',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s',
-                  boxShadow: '0 4px 16px rgba(239, 68, 68, 0.15)'
-                }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                  <Scale size={24} color="#ef4444" />
-                  <span style={{ background: '#dc2626', color: '#fff', fontSize: '0.7rem', fontWeight: 'bold', padding: '3px 8px', borderRadius: '4px' }}>
-                    ARREST
-                  </span>
-                </div>
-                <h3 style={{ fontSize: '1.15rem', color: '#fff', fontWeight: '800', margin: '0 0 6px' }}>
-                  Police Suspect Lineup
-                </h3>
-                <p style={{ color: '#94a3b8', fontSize: '0.85rem', lineHeight: 1.4, margin: '0 0 12px' }}>
-                  Identify the guilty suspect, slap on the handcuffs, and send them to Judge Hall for sentencing!
-                </p>
-                <span style={{ color: '#ef4444', fontSize: '0.8rem', fontWeight: 'bold' }}>
-                  Proceed to Arrest Lineup →
-                </span>
+                <button
+                  className="btn-primary"
+                  style={{ padding: '12px 24px', fontSize: '0.95rem', fontWeight: '800' }}
+                  onClick={() => setActiveTab('scene')}
+                >
+                  Enter Crime Scene →
+                </button>
               </div>
             </div>
-          </div>
+          )
         )}
 
-        {/* TAB 2: HIDDEN OBJECT CRIME SCENE */}
+        {/* TAB 2: 3D HIDDEN OBJECT CRIME SCENE */}
         {activeTab === 'scene' && (
           <CCCrimeScene onComplete={handleSceneComplete} />
         )}
 
-        {/* TAB 3: FORENSIC LAB */}
+        {/* TAB 3: 3D FORENSIC LAB */}
         {activeTab === 'lab' && (
-          <CCLabTab
-            stars={stars}
-            onSpendStar={handleSpendStar}
-            discoveredTraits={discoveredTraits}
-            onTraitDiscovered={handleTraitDiscovered}
-            onGoToProfile={() => setActiveTab('profile')}
-          />
+          use3D ? (
+            <CC3DLab
+              stars={stars}
+              onSpendStar={handleSpendStar}
+              discoveredTraits={discoveredTraits}
+              onTraitDiscovered={handleTraitDiscovered}
+              onGoToProfile={() => setActiveTab('profile')}
+            />
+          ) : (
+            <CCLabTab
+              stars={stars}
+              onSpendStar={handleSpendStar}
+              discoveredTraits={discoveredTraits}
+              onTraitDiscovered={handleTraitDiscovered}
+              onGoToProfile={() => setActiveTab('profile')}
+            />
+          )
         )}
 
-        {/* TAB 4: KILLER PROFILE BOOK */}
+        {/* TAB 4: 3D KILLER PROFILE BOOK */}
         {activeTab === 'profile' && (
-          <CCProfileTab
-            discoveredTraits={discoveredTraits}
-            onGoToLineup={() => setActiveTab('lineup')}
-          />
+          use3D ? (
+            <CC3DProfile
+              discoveredTraits={discoveredTraits}
+              onGoToLineup={() => setActiveTab('lineup')}
+            />
+          ) : (
+            <CCProfileTab
+              discoveredTraits={discoveredTraits}
+              onGoToLineup={() => setActiveTab('lineup')}
+            />
+          )
         )}
 
-        {/* TAB 5: SUSPECT INTERROGATIONS */}
+        {/* TAB 5: 3D SUSPECT INTERROGATIONS */}
         {activeTab === 'interrogate' && (
-          <CCInterrogateTab onGoToLineup={() => setActiveTab('lineup')} />
+          use3D ? (
+            <CC3DInterrogation onGoToLineup={() => setActiveTab('lineup')} />
+          ) : (
+            <CCInterrogateTab onGoToLineup={() => setActiveTab('lineup')} />
+          )
         )}
 
-        {/* TAB 6: POLICE LINEUP & ARREST */}
+        {/* TAB 6: 3D POLICE LINEUP & ARREST */}
         {activeTab === 'lineup' && (
-          <CCArrestLineup
-            discoveredTraits={discoveredTraits}
-            totalScore={totalScore}
-            onReplay={() => {
-              restartCase();
-              setActiveTab('tablet');
-            }}
-          />
+          use3D ? (
+            <CC3DLineup
+              discoveredTraits={discoveredTraits}
+              totalScore={totalScore}
+              onReplay={() => {
+                restartCase();
+                setActiveTab('tablet');
+              }}
+            />
+          ) : (
+            <CCArrestLineup
+              discoveredTraits={discoveredTraits}
+              totalScore={totalScore}
+              onReplay={() => {
+                restartCase();
+                setActiveTab('tablet');
+              }}
+            />
+          )
         )}
       </main>
     </div>
   );
 };
+
