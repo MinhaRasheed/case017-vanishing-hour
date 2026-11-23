@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useGame } from '../../game/state/GameStateContext';
 import { audio } from '../../services/audioService';
+import { CC3DScene } from './CC3DScene';
 import {
   Search,
   Star,
@@ -10,14 +11,17 @@ import {
   Sparkles,
   ArrowRight,
   Clock,
-  Award
+  Award,
+  Box,
+  Layers,
+  HelpCircle
 } from 'lucide-react';
 
 interface HiddenItem {
   id: string;
   name: string;
-  x: number; // percentage X in scene
-  y: number; // percentage Y in scene
+  x: number; // percentage X in scene (for 2D fallback)
+  y: number; // percentage Y in scene (for 2D fallback)
   radius: number; // click radius in percentage
   clueReward?: string;
   revealedEvidenceId?: string;
@@ -28,7 +32,7 @@ const SCENE_ITEMS: HiddenItem[] = [
   { id: 'thinkpad_laptop', name: 'ThinkPad Laptop', x: 67, y: 49, radius: 8, revealedEvidenceId: 'ev_laptop_spreadsheets' },
   { id: 'alarm_keypad', name: 'Honeywell Keypad', x: 23.5, y: 44, radius: 5, revealedEvidenceId: 'ev_alarm_timer' },
   { id: 'deadbolt_lock', name: 'Scuffed Deadbolt', x: 12, y: 56, radius: 5, revealedEvidenceId: 'ev_deadbolt_scuff' },
-  { id: 'closet_hatch', name: 'Closet Hatch', x: 88, y: 46, radius: 8 },
+  { id: 'neodymium_magnet', name: 'Neodymium Magnet', x: 88, y: 46, radius: 8, revealedEvidenceId: 'ev_deadbolt_scuff' },
   { id: 'torn_will', name: 'Torn Will Fragment', x: 48, y: 84, radius: 5, revealedEvidenceId: 'ev_torn_will' },
   { id: 'access_card', name: 'Access Keycard', x: 74, y: 55, radius: 4, revealedEvidenceId: 'ev_damaged_access_card' },
   { id: 'prescrip_vial', name: 'Sedative Ampoule', x: 86, y: 70, radius: 4, revealedEvidenceId: 'ev_midazolam_ampoule' },
@@ -38,6 +42,8 @@ const SCENE_ITEMS: HiddenItem[] = [
 
 export const CCCrimeScene: React.FC<{ onComplete: (starsEarned: number, score: number) => void }> = ({ onComplete }) => {
   const { inspectObject } = useGame();
+  const [viewMode, setViewMode] = useState<'3d' | '2d'>('3d');
+  const [isUVMode, setIsUVMode] = useState<boolean>(false);
   const [foundItemIds, setFoundItemIds] = useState<string[]>([]);
   const [score, setScore] = useState<number>(0);
   const [combo, setCombo] = useState<number>(1);
@@ -48,9 +54,8 @@ export const CCCrimeScene: React.FC<{ onComplete: (starsEarned: number, score: n
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
   const [elapsedSeconds, setElapsedSeconds] = useState<number>(0);
 
-  // Active items in the bottom dock (4 at a time)
-  const remainingItems = SCENE_ITEMS.filter(item => !foundItemIds.includes(item.id));
-  const activeDockItems = SCENE_ITEMS.slice(0, 8); // show up to 8 targets
+  // Active items in the bottom dock
+  const activeDockItems = SCENE_ITEMS;
 
   // Elapsed timer
   useEffect(() => {
@@ -81,7 +86,54 @@ export const CCCrimeScene: React.FC<{ onComplete: (starsEarned: number, score: n
     return () => clearInterval(t);
   }, [hintCooldown]);
 
-  const handleSceneClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  // Trigger item discovery when picked up from 3D scene
+  const handle3DItemFound = (id: string, name: string) => {
+    if (isCompleted) return;
+    if (foundItemIds.includes(id)) {
+      audio.playDullClick();
+      return;
+    }
+
+    const hitItem = SCENE_ITEMS.find(i => i.id === id);
+    audio.playEvidenceFound();
+    const points = 10000 * combo;
+    setScore(s => s + points);
+    setCombo(c => Math.min(6, c + 1));
+    setComboTimeLeft(100);
+
+    const nextFound = [...foundItemIds, id];
+    setFoundItemIds(nextFound);
+
+    // Reveal evidence in case database
+    if (hitItem?.revealedEvidenceId) {
+      inspectObject(hitItem.id);
+    }
+
+    // Add floating score text in center screen
+    const newFloating = {
+      id: Date.now() + Math.random(),
+      text: `+${points.toLocaleString()}! ${combo > 1 ? `x${combo} COMBO!` : ''} [${name}]`,
+      x: 50,
+      y: 40
+    };
+    setFloatingScores(prev => [...prev, newFloating]);
+    setTimeout(() => {
+      setFloatingScores(prev => prev.filter(f => f.id !== newFloating.id));
+    }, 1400);
+
+    // Clear hint if that item was hinted
+    if (hintItemId === id) setHintItemId(null);
+
+    // Check completion
+    if (nextFound.length >= SCENE_ITEMS.length) {
+      setTimeout(() => {
+        audio.playStamp();
+        setIsCompleted(true);
+      }, 500);
+    }
+  };
+
+  const handle2DSceneClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isCompleted) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const clickX = ((e.clientX - rect.left) / rect.width) * 100;
@@ -97,43 +149,8 @@ export const CCCrimeScene: React.FC<{ onComplete: (starsEarned: number, score: n
     });
 
     if (hitItem) {
-      // SUCCESS HIT!
-      audio.playEvidenceFound();
-      const points = 10000 * combo;
-      setScore(s => s + points);
-      setCombo(c => Math.min(6, c + 1));
-      setComboTimeLeft(100);
-
-      const nextFound = [...foundItemIds, hitItem.id];
-      setFoundItemIds(nextFound);
-
-      // If this item unlocks clue in game engine
-      if (hitItem.revealedEvidenceId) {
-        inspectObject(hitItem.id);
-      }
-
-      // Add floating score text
-      const newFloating = {
-        id: Date.now() + Math.random(),
-        text: `+${points.toLocaleString()}! ${combo > 1 ? `x${combo} COMBO!` : ''}`,
-        x: hitItem.x,
-        y: hitItem.y
-      };
-      setFloatingScores(prev => [...prev, newFloating]);
-      setTimeout(() => {
-        setFloatingScores(prev => prev.filter(f => f.id !== newFloating.id));
-      }, 1200);
-
-      // Clear hint if that item was hinted
-      if (hintItemId === hitItem.id) setHintItemId(null);
-
-      // Check win condition
-      if (nextFound.length >= SCENE_ITEMS.length) {
-        audio.playStamp();
-        setIsCompleted(true);
-      }
+      handle3DItemFound(hitItem.id, hitItem.name);
     } else {
-      // Misclick penalty
       audio.playDullClick();
       setCombo(1);
       setComboTimeLeft(0);
@@ -159,26 +176,79 @@ export const CCCrimeScene: React.FC<{ onComplete: (starsEarned: number, score: n
         margin: '0 auto 12px',
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
+        flexWrap: 'wrap',
+        gap: '12px'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <h2 style={{ fontSize: '1.4rem', color: '#fff', fontWeight: '900', margin: 0 }}>
+          <h2 style={{ fontSize: '1.4rem', color: '#fff', fontWeight: '900', margin: 0, letterSpacing: '0.04em' }}>
             CRIME SCENE #01: PENTHOUSE 4B
           </h2>
           <span style={{
             background: '#1e3a8a',
             color: '#93c5fd',
-            padding: '3px 10px',
+            padding: '4px 12px',
             borderRadius: '12px',
-            fontSize: '0.75rem',
+            fontSize: '0.8rem',
             fontFamily: 'monospace',
-            fontWeight: 'bold'
+            fontWeight: 'bold',
+            border: '1px solid #3b82f6'
           }}>
             {foundItemIds.length} / {SCENE_ITEMS.length} CLUES FOUND
           </span>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          {/* View Mode Switcher */}
+          <div style={{
+            background: '#0f172a',
+            border: '1px solid #334155',
+            borderRadius: '8px',
+            padding: '3px',
+            display: 'flex',
+            gap: '4px'
+          }}>
+            <button
+              onClick={() => { setViewMode('3d'); audio.playCardFlip(); }}
+              style={{
+                background: viewMode === '3d' ? 'linear-gradient(135deg, #0284c7, #2563eb)' : 'transparent',
+                color: viewMode === '3d' ? '#fff' : '#94a3b8',
+                border: 'none',
+                borderRadius: '6px',
+                padding: '5px 12px',
+                fontSize: '0.75rem',
+                fontWeight: '800',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '5px'
+              }}
+            >
+              <Box size={14} />
+              <span>3D REALITY ROOM</span>
+            </button>
+
+            <button
+              onClick={() => { setViewMode('2d'); audio.playCardFlip(); }}
+              style={{
+                background: viewMode === '2d' ? 'linear-gradient(135deg, #0284c7, #2563eb)' : 'transparent',
+                color: viewMode === '2d' ? '#fff' : '#94a3b8',
+                border: 'none',
+                borderRadius: '6px',
+                padding: '5px 12px',
+                fontSize: '0.75rem',
+                fontWeight: '800',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '5px'
+              }}
+            >
+              <Layers size={14} />
+              <span>2D BLUEPRINT</span>
+            </button>
+          </div>
+
           {/* Time Counter */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#94a3b8', fontSize: '0.9rem', fontFamily: 'monospace' }}>
             <Clock size={16} />
@@ -194,7 +264,8 @@ export const CCCrimeScene: React.FC<{ onComplete: (starsEarned: number, score: n
             color: '#38bdf8',
             fontWeight: '900',
             fontFamily: 'monospace',
-            fontSize: '1.1rem'
+            fontSize: '1.1rem',
+            boxShadow: '0 0 12px rgba(56, 189, 248, 0.3)'
           }}>
             {score.toLocaleString()} PTS
           </div>
@@ -202,10 +273,10 @@ export const CCCrimeScene: React.FC<{ onComplete: (starsEarned: number, score: n
       </div>
 
       {/* Main Crime Scene Graphic Canvas */}
-      <div className="cc-scene-wrapper" onClick={handleSceneClick} style={{ cursor: 'crosshair', minHeight: '480px' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative' }}>
         {/* Combo Multiplier Bar at Top Center */}
         {combo > 1 && (
-          <div className="cc-combo-bar-container">
+          <div className="cc-combo-bar-container" style={{ zIndex: 40 }}>
             <div style={{ color: '#f59e0b', fontWeight: '900', fontSize: '0.9rem', fontFamily: 'monospace', display: 'flex', alignItems: 'center', gap: '4px' }}>
               <Zap size={16} /> COMBO x{combo}
             </div>
@@ -215,129 +286,147 @@ export const CCCrimeScene: React.FC<{ onComplete: (starsEarned: number, score: n
           </div>
         )}
 
-        {/* Vector Crime Scene SVG */}
-        <svg viewBox="0 0 1000 500" width="100%" height="100%" style={{ display: 'block', pointerEvents: 'none' }}>
-          <defs>
-            <radialGradient id="lampGlowCC" cx="65%" cy="35%" r="45%">
-              <stop offset="0%" stopColor="#fef08a" stopOpacity="0.45" />
-              <stop offset="50%" stopColor="#d97706" stopOpacity="0.15" />
-              <stop offset="100%" stopColor="#0b0f19" stopOpacity="0" />
-            </radialGradient>
-            <linearGradient id="parquetCC" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#1c140e" />
-              <stop offset="100%" stopColor="#0a0705" />
-            </linearGradient>
-          </defs>
+        {/* 3D Scene or 2D Vector Fallback */}
+        {viewMode === '3d' ? (
+          <CC3DScene
+            foundItemIds={foundItemIds}
+            onItemFound={handle3DItemFound}
+            hintItemId={hintItemId}
+            isUVMode={isUVMode}
+            onToggleUV={() => {
+              audio.playCardFlip();
+              setIsUVMode(v => !v);
+            }}
+          />
+        ) : (
+          <div className="cc-scene-wrapper" onClick={handle2DSceneClick} style={{ cursor: 'crosshair', minHeight: '520px' }}>
+            {/* Vector Crime Scene SVG */}
+            <svg viewBox="0 0 1000 500" width="100%" height="100%" style={{ display: 'block', pointerEvents: 'none' }}>
+              <defs>
+                <radialGradient id="lampGlowCC" cx="65%" cy="35%" r="45%">
+                  <stop offset="0%" stopColor="#fef08a" stopOpacity="0.45" />
+                  <stop offset="50%" stopColor="#d97706" stopOpacity="0.15" />
+                  <stop offset="100%" stopColor="#0b0f19" stopOpacity="0" />
+                </radialGradient>
+                <linearGradient id="parquetCC" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#1c140e" />
+                  <stop offset="100%" stopColor="#0a0705" />
+                </linearGradient>
+              </defs>
 
-          {/* Room Walls & Floor */}
-          <rect width="1000" height="350" fill="#111622" />
-          <line x1="0" y1="350" x2="1000" y2="350" stroke="#1e293b" strokeWidth="3" />
-          <rect y="350" width="1000" height="150" fill="url(#parquetCC)" />
+              {/* Room Walls & Floor */}
+              <rect width="1000" height="350" fill="#111622" />
+              <line x1="0" y1="350" x2="1000" y2="350" stroke="#1e293b" strokeWidth="3" />
+              <rect y="350" width="1000" height="150" fill="url(#parquetCC)" />
 
-          {/* Floorboard lines */}
-          <g stroke="#261c14" strokeWidth="1">
-            <line x1="0" y1="350" x2="0" y2="500" />
-            <line x1="150" y1="350" x2="100" y2="500" />
-            <line x1="300" y1="350" x2="280" y2="500" />
-            <line x1="500" y1="350" x2="500" y2="500" />
-            <line x1="700" y1="350" x2="720" y2="500" />
-            <line x1="850" y1="350" x2="900" y2="500" />
-            <line x1="1000" y1="350" x2="1000" y2="500" />
-          </g>
-
-          {/* Rain Streaked French Windows with Manhattan View */}
-          <rect x="350" y="40" width="220" height="260" fill="#020617" stroke="#334155" strokeWidth="8" rx="4" />
-          <line x1="460" y1="40" x2="460" y2="300" stroke="#334155" strokeWidth="4" />
-          <line x1="350" y1="170" x2="570" y2="170" stroke="#334155" strokeWidth="4" />
-          {/* Distant illuminated city towers */}
-          <rect x="370" y="110" width="30" height="180" fill="#0f172a" />
-          <rect x="420" y="80" width="45" height="210" fill="#1e293b" />
-          <rect x="480" y="130" width="40" height="160" fill="#0f172a" />
-          <rect x="530" y="100" width="30" height="190" fill="#1e293b" />
-
-          {/* Locked Solid Oak Door 4B on Left */}
-          <rect x="60" y="100" width="120" height="250" fill="#291a10" stroke="#451a03" strokeWidth="6" rx="3" />
-          <circle cx="120" cy="280" r="14" fill="#b45309" stroke="#f59e0b" strokeWidth="2" />
-          <text x="120" y="140" fill="#d97706" fontSize="16" fontFamily="serif" fontWeight="bold" textAnchor="middle">4B</text>
-
-          {/* Honeywell Digital Alarm Panel */}
-          <rect x="215" y="190" width="40" height="55" fill="#1e293b" stroke="#475569" strokeWidth="2" rx="3" />
-          <rect x="220" y="196" width="30" height="16" fill="#022c22" />
-          <text x="235" y="208" fill="#4ade80" fontSize="7" fontFamily="monospace" textAnchor="middle">11:47</text>
-          <circle cx="225" cy="220" r="2" fill="#94a3b8" />
-          <circle cx="235" cy="220" r="2" fill="#94a3b8" />
-          <circle cx="245" cy="220" r="2" fill="#94a3b8" />
-          <circle cx="225" cy="230" r="2" fill="#94a3b8" />
-          <circle cx="235" cy="230" r="2" fill="#94a3b8" />
-          <circle cx="245" cy="230" r="2" fill="#ef4444" />
-
-          {/* Workstation Desk & Open Laptop */}
-          <rect x="580" y="270" width="200" height="15" fill="#3b2314" stroke="#54331d" strokeWidth="2" rx="2" />
-          <line x1="600" y1="285" x2="600" y2="420" stroke="#26170d" strokeWidth="8" />
-          <line x1="760" y1="285" x2="760" y2="420" stroke="#26170d" strokeWidth="8" />
-          <polygon points="630,270 710,270 720,282 620,282" fill="#1e293b" />
-          <rect x="630" y="210" width="80" height="60" fill="#0f172a" stroke="#334155" strokeWidth="2" rx="2" />
-          <rect x="634" y="214" width="72" height="52" fill="#0284c7" opacity="0.85" />
-          <circle cx="620" cy="270" r="4" fill="#fbbf24" stroke="#d97706" />
-
-          {/* Access Card on Desk */}
-          <rect x="730" y="272" width="20" height="12" fill="#f8fafc" stroke="#38bdf8" strokeWidth="1" rx="2" />
-
-          {/* Coffee Table with Whiskey Glass and Ampoule */}
-          <ellipse cx="670" cy="380" rx="90" ry="32" fill="#1e293b" stroke="#475569" strokeWidth="3" />
-          {/* Whiskey Tumbler */}
-          <path d="M 660 365 L 680 365 L 678 395 L 662 395 Z" fill="#d97706" opacity="0.85" stroke="#fef08a" strokeWidth="1.5" />
-          <rect x="664" y="375" width="5" height="5" fill="#fef08a" opacity="0.7" />
-          {/* Ampoule */}
-          <rect x="690" y="380" width="4" height="14" rx="2" fill="#38bdf8" stroke="#fff" strokeWidth="0.8" />
-
-          {/* Persian Area Rug with Footprint */}
-          <ellipse cx="380" cy="400" rx="140" ry="50" fill="#7f1d1d" stroke="#991b1b" strokeWidth="3" />
-          <ellipse cx="380" cy="400" rx="120" ry="40" fill="#450a0a" />
-          {/* Muddy Shoe Impression on Rug */}
-          <ellipse cx="380" cy="390" rx="12" ry="24" fill="#1c1917" opacity="0.8" />
-          <ellipse cx="380" cy="415" rx="8" ry="10" fill="#1c1917" opacity="0.8" />
-
-          {/* Hearth with Torn Will Scraps */}
-          <rect x="440" y="410" width="80" height="25" fill="#020617" stroke="#334155" strokeWidth="2" rx="4" />
-          <polygon points="460,418 475,415 470,428 458,425" fill="#fef3c7" stroke="#d97706" strokeWidth="1" />
-          <polygon points="480,417 495,419 492,428 478,426" fill="#fef3c7" stroke="#d97706" strokeWidth="1" />
-
-          {/* Closet Panel on Right */}
-          <rect x="830" y="120" width="110" height="230" fill="#1e1812" stroke="#382517" strokeWidth="4" />
-          <rect x="850" y="270" width="70" height="70" fill="#0f172a" stroke="#475569" strokeWidth="2" strokeDasharray="4 2" />
-
-          {/* Found Items Halo Rings */}
-          {foundItemIds.map(fId => {
-            const it = SCENE_ITEMS.find(i => i.id === fId);
-            if (!it) return null;
-            return (
-              <g key={it.id}>
-                <circle cx={it.x * 10} cy={it.y * 5} r={it.radius * 6} fill="none" stroke="#10b981" strokeWidth="3" opacity="0.8" />
-                <circle cx={it.x * 10} cy={it.y * 5} r="6" fill="#10b981" />
+              {/* Floorboard lines */}
+              <g stroke="#261c14" strokeWidth="1">
+                <line x1="0" y1="350" x2="0" y2="500" />
+                <line x1="150" y1="350" x2="100" y2="500" />
+                <line x1="300" y1="350" x2="280" y2="500" />
+                <line x1="500" y1="350" x2="500" y2="500" />
+                <line x1="700" y1="350" x2="720" y2="500" />
+                <line x1="850" y1="350" x2="900" y2="500" />
+                <line x1="1000" y1="350" x2="1000" y2="500" />
               </g>
-            );
-          })}
 
-          {/* Hint Pulsing Halo */}
-          {hintItemId && (() => {
-            const hItem = SCENE_ITEMS.find(i => i.id === hintItemId);
-            if (!hItem) return null;
-            return (
-              <g>
-                <circle cx={hItem.x * 10} cy={hItem.y * 5} r={hItem.radius * 9} fill="none" stroke="#f59e0b" strokeWidth="5" strokeDasharray="6 4" />
-                <circle cx={hItem.x * 10} cy={hItem.y * 5} r={hItem.radius * 5} fill="rgba(245, 158, 11, 0.3)" />
-              </g>
-            );
-          })()}
-        </svg>
+              {/* Rain Streaked French Windows with Manhattan View */}
+              <rect x="350" y="40" width="220" height="260" fill="#020617" stroke="#334155" strokeWidth="8" rx="4" />
+              <line x1="460" y1="40" x2="460" y2="300" stroke="#334155" strokeWidth="4" />
+              <line x1="350" y1="170" x2="570" y2="170" stroke="#334155" strokeWidth="4" />
+              <rect x="370" y="110" width="30" height="180" fill="#0f172a" />
+              <rect x="420" y="80" width="45" height="210" fill="#1e293b" />
+              <rect x="480" y="130" width="40" height="160" fill="#0f172a" />
+              <rect x="530" y="100" width="30" height="190" fill="#1e293b" />
+
+              {/* Locked Solid Oak Door 4B on Left */}
+              <rect x="60" y="100" width="120" height="250" fill="#291a10" stroke="#451a03" strokeWidth="6" rx="3" />
+              <circle cx="120" cy="280" r="14" fill="#b45309" stroke="#f59e0b" strokeWidth="2" />
+              <text x="120" y="140" fill="#d97706" fontSize="16" fontFamily="serif" fontWeight="bold" textAnchor="middle">4B</text>
+
+              {/* Honeywell Digital Alarm Panel */}
+              <rect x="215" y="190" width="40" height="55" fill="#1e293b" stroke="#475569" strokeWidth="2" rx="3" />
+              <rect x="220" y="196" width="30" height="16" fill="#022c22" />
+              <text x="235" y="208" fill="#4ade80" fontSize="7" fontFamily="monospace" textAnchor="middle">11:47</text>
+              <circle cx="225" cy="220" r="2" fill="#94a3b8" />
+              <circle cx="235" cy="220" r="2" fill="#94a3b8" />
+              <circle cx="245" cy="220" r="2" fill="#94a3b8" />
+              <circle cx="225" cy="230" r="2" fill="#94a3b8" />
+              <circle cx="235" cy="230" r="2" fill="#94a3b8" />
+              <circle cx="245" cy="230" r="2" fill="#ef4444" />
+
+              {/* Workstation Desk & Open Laptop */}
+              <rect x="580" y="270" width="200" height="15" fill="#3b2314" stroke="#54331d" strokeWidth="2" rx="2" />
+              <line x1="600" y1="285" x2="600" y2="420" stroke="#26170d" strokeWidth="8" />
+              <line x1="760" y1="285" x2="760" y2="420" stroke="#26170d" strokeWidth="8" />
+              <polygon points="630,270 710,270 720,282 620,282" fill="#1e293b" />
+              <rect x="630" y="210" width="80" height="60" fill="#0f172a" stroke="#334155" strokeWidth="2" rx="2" />
+              <rect x="634" y="214" width="72" height="52" fill="#0284c7" opacity="0.85" />
+              <circle cx="620" cy="270" r="4" fill="#fbbf24" stroke="#d97706" />
+
+              {/* Access Card on Desk */}
+              <rect x="730" y="272" width="20" height="12" fill="#f8fafc" stroke="#38bdf8" strokeWidth="1" rx="2" />
+
+              {/* Coffee Table with Whiskey Glass and Ampoule */}
+              <ellipse cx="670" cy="380" rx="90" ry="32" fill="#1e293b" stroke="#475569" strokeWidth="3" />
+              <path d="M 660 365 L 680 365 L 678 395 L 662 395 Z" fill="#d97706" opacity="0.85" stroke="#fef08a" strokeWidth="1.5" />
+              <rect x="664" y="375" width="5" height="5" fill="#fef08a" opacity="0.7" />
+              <rect x="690" y="380" width="4" height="14" rx="2" fill="#38bdf8" stroke="#fff" strokeWidth="0.8" />
+
+              {/* Persian Area Rug with Footprint */}
+              <ellipse cx="380" cy="400" rx="140" ry="50" fill="#7f1d1d" stroke="#991b1b" strokeWidth="3" />
+              <ellipse cx="380" cy="400" rx="120" ry="40" fill="#450a0a" />
+              <ellipse cx="380" cy="390" rx="12" ry="24" fill="#1c1917" opacity="0.8" />
+              <ellipse cx="380" cy="415" rx="8" ry="10" fill="#1c1917" opacity="0.8" />
+
+              {/* Hearth with Torn Will Scraps */}
+              <rect x="440" y="410" width="80" height="25" fill="#020617" stroke="#334155" strokeWidth="2" rx="4" />
+              <polygon points="460,418 475,415 470,428 458,425" fill="#fef3c7" stroke="#d97706" strokeWidth="1" />
+              <polygon points="480,417 495,419 492,428 478,426" fill="#fef3c7" stroke="#d97706" strokeWidth="1" />
+
+              {/* Bookshelf / Magnet Area */}
+              <rect x="830" y="120" width="110" height="230" fill="#1e1812" stroke="#382517" strokeWidth="4" />
+              <rect x="850" y="270" width="70" height="70" fill="#0f172a" stroke="#475569" strokeWidth="2" strokeDasharray="4 2" />
+
+              {/* Found Items Halo Rings */}
+              {foundItemIds.map(fId => {
+                const it = SCENE_ITEMS.find(i => i.id === fId);
+                if (!it) return null;
+                return (
+                  <g key={it.id}>
+                    <circle cx={it.x * 10} cy={it.y * 5} r={it.radius * 6} fill="none" stroke="#10b981" strokeWidth="3" opacity="0.8" />
+                    <circle cx={it.x * 10} cy={it.y * 5} r="6" fill="#10b981" />
+                  </g>
+                );
+              })}
+
+              {/* Hint Pulsing Halo */}
+              {hintItemId && (() => {
+                const hItem = SCENE_ITEMS.find(i => i.id === hintItemId);
+                if (!hItem) return null;
+                return (
+                  <g>
+                    <circle cx={hItem.x * 10} cy={hItem.y * 5} r={hItem.radius * 9} fill="none" stroke="#f59e0b" strokeWidth="5" strokeDasharray="6 4" />
+                    <circle cx={hItem.x * 10} cy={hItem.y * 5} r={hItem.radius * 5} fill="rgba(245, 158, 11, 0.3)" />
+                  </g>
+                );
+              })()}
+            </svg>
+          </div>
+        )}
 
         {/* Floating Score Popups */}
         {floatingScores.map(f => (
           <div
             key={f.id}
             className="cc-floating-score"
-            style={{ left: `${f.x}%`, top: `${f.y}%` }}
+            style={{
+              left: `${f.x}%`,
+              top: `${f.y}%`,
+              pointerEvents: 'none',
+              transform: 'translate(-50%, -50%)',
+              zIndex: 50
+            }}
           >
             {f.text}
           </div>
@@ -357,10 +446,22 @@ export const CCCrimeScene: React.FC<{ onComplete: (starsEarned: number, score: n
                 className={`cc-item-word-card ${isFound ? 'found' : ''}`}
                 style={{
                   border: isHinted ? '2px solid #f59e0b' : undefined,
-                  boxShadow: isHinted ? '0 0 14px #f59e0b' : undefined
+                  boxShadow: isHinted ? '0 0 14px #f59e0b' : undefined,
+                  cursor: isFound ? 'default' : 'pointer'
+                }}
+                onClick={() => {
+                  if (!isFound) {
+                    // Quick hint for this specific item if clicked
+                    setHintItemId(item.id);
+                    setTimeout(() => setHintItemId(null), 3500);
+                  }
                 }}
               >
-                {isFound && <CheckCircle size={16} color="#10b981" />}
+                {isFound ? (
+                  <CheckCircle size={16} color="#10b981" />
+                ) : (
+                  <Search size={14} color="#94a3b8" />
+                )}
                 <span>{item.name}</span>
               </div>
             );
